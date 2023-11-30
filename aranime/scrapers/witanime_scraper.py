@@ -3,7 +3,6 @@ import base64
 import re
 from urllib.parse import quote
 from bs4 import BeautifulSoup
-from pprint import pprint
 from aranime.utils import debug, die
 
 site_extension = "pics"

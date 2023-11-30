@@ -1,9 +1,6 @@
 import requests
-import base64
 import re
-from urllib.parse import quote
 from bs4 import BeautifulSoup
-from pprint import pprint
 from aranime.utils import debug, die
 from urllib.parse import urlencode
 import jmespath

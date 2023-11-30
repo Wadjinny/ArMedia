@@ -1,12 +1,10 @@
 import re
-import gdown
 from pathlib import Path
 import requests
-from bs4 import BeautifulSoup
 from aranime.utils.file_downloader import download_file
 from aranime.utils import die
 import m3u8_To_MP4
-import json
+
 
 
 filter_function = lambda x: "anime4low.sb" in x

@@ -1,7 +1,4 @@
 # %% %%
-import requests
-import re
-from pathlib import Path
 import subprocess
 
 filter_function = lambda x: "mega.nz" in x

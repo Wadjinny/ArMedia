@@ -1,9 +1,5 @@
-import requests
-import re
 from aranime.utils.file_downloader import download_file
 from aranime.utils import debug, die
-from pathlib import Path
-
 filter_function = lambda x: ("shahidha.net" in x or "cdn.animeiat.tv" in x) and ".mp4" in x
 priority = 6
 

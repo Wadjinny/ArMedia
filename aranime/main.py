@@ -15,8 +15,6 @@ from pathlib import Path
 from .utils import zip_extend, die
 from time import sleep
 from typing_extensions import Annotated
-from rich.panel import Panel
-import os
 console = Console()
 
 

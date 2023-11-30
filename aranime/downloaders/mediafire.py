@@ -1,4 +1,3 @@
-import mediafire_dl
 import requests
 import re
 from pathlib import Path

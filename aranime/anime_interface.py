@@ -1,7 +1,6 @@
 from .provider_wrapper.base_provider import Provider
 from .scrapers.animewave_scraper import search_anime
 from .utils import debug, die
-from .utils.file_downloader import download_file
 from .downloaders import (
     drive,
     mediafire,

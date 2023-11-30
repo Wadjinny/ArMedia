@@ -1,10 +1,8 @@
 # %%
 import requests
-import re
 from bs4 import BeautifulSoup
 import json
 from aranime.utils.file_downloader import download_file
-from pathlib import Path
 
 # %%
 

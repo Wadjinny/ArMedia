@@ -1,10 +1,5 @@
 import requests
-import base64
 import re
-from urllib.parse import quote
-from bs4 import BeautifulSoup
-from pprint import pprint
-from ..utils import debug, die
 from aranime.utils.file_downloader import download_file
 
 
