@@ -138,6 +138,9 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
     response = response.encode().decode("unicode-escape").replace("\/", "/")
     # select all line with <option
     option_lines = re.findall(r"<option(.*?)<\/option>", response, re.S)
+    if len(option_lines) == 0:
+        print(f"No episodes found for {anime_link}")
+        return []
     episodes_list = []
     # identify if its a movie or a serie
     if "@" in option_lines[0]:

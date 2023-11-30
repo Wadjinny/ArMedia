@@ -11,6 +11,7 @@ from .downloaders import (
     soraplay,
     stream_wish,
     shahidha,
+    ds2play,
 )
 import re
 from tqdm import tqdm
@@ -91,6 +92,7 @@ class Server:
             dropbox,
             stream_wish,
             shahidha,
+            ds2play,
         ]
         for downloader in available_downloaders:
             if downloader.filter_function(link):

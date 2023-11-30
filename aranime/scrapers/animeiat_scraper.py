@@ -24,13 +24,14 @@ def get_search_results_link(search_term: str) -> list[dict[str, str]]:
     return result_animes
 
 def get_episodes_list(anime_link) -> list[str]:
+    base_url = "https://www.animeiat.xyz"
     session = requests.Session()
+    
     response = session.get(anime_link, timeout=100)
     response = response.text
     soup = BeautifulSoup(response, "html.parser")
     episodes = soup.select(".anime-episodes .row > div")
     result_episodes = []
-    base_url = "https://www.animeiat.xyz"
     for episode in episodes:
         link = episode.select_one(".v-responsive__content a")["href"]
         number = episode.select_one(".v-responsive__content .v-chip__content").text
@@ -80,6 +81,6 @@ def get_all_episodes_server_link(episode_link)->list[str]:
 
 if __name__ == "__main__":
     search_term = "astarotte"
-    url = "https://www.animeiat.xyz/watch/boruto-naruto-next-generations-episode-1"
+    url = "https://www.animeiat.xyz/anime/one-piece"
     
-    get_all_episodes_server_link(url)
+    print(get_episodes_list(url))

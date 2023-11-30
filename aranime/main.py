@@ -5,6 +5,7 @@ from aranime.provider_wrapper import (
     AnimeSanka,
     ZimaBdk,
     AnimeIat,
+    EgyDead,
     ProviderController,
     EpisodeController,
 )
@@ -15,10 +16,13 @@ from pathlib import Path
 from .utils import zip_extend, die
 from time import sleep
 from typing_extensions import Annotated
+
 console = Console()
 
+app = typer.Typer(pretty_exceptions_show_locals=False)
 
-def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
+@app.command()
+def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
     columns = ["id"]
 
     results = []
@@ -29,9 +33,10 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
         WitAnime,
         ZimaBdk,
         AnimeIat,
+        # EgyDead,
     ]
     for i, provider in enumerate(search_providers):
-        search_result = provider.search_anime(anime_name)
+        search_result = provider.search_anime(anime)
         if len(search_result) == 0:
             to_pop.append(i)
             continue
@@ -42,7 +47,7 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
         )
         columns.append(provider.__name__)
     if len(results) == 0:
-        console.print(f'"{anime_name}" didn\'t get any results')
+        console.print(f'"{anime}" didn\'t get any results')
         return
     for i in to_pop[::-1]:
         search_providers.pop(i)
@@ -126,7 +131,7 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
 
 
 def run():
-    typer.run(main)
+    app()
 
 
 if __name__ == "__main__":
