@@ -19,7 +19,7 @@ import os
 console = Console()
 
 
-def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH")):
+def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
     # name = Prompt.ask("Enter anime name")
     # anime_name = "mf ghost"
     columns = ["id"]
@@ -67,13 +67,15 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
 
     while True:
         anime_indecies = Prompt.ask("Choose the anime number")
-        # anime_indecies = "0 0 0"
         try:
             anime_indecies = [int(i) for i in anime_indecies.split(" ")]
         except ValueError:
             console.print("you must enter numbers")
             continue
 
+        if len(anime_indecies) == 1:
+            anime_indecies = anime_indecies * len(search_providers)
+            
         if len(anime_indecies) != len(columns) - 1:
             console.print(f"you must choose {len(columns) - 1 } animes")
             continue
@@ -82,6 +84,7 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
             console.print(f"you must choose animes between 0[deselect] and id of anime")
             continue
         break
+        
 
     providers = [
         provider_cls(anime[index - 1])
@@ -89,7 +92,6 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
         if index != 0
     ]
     console.clear()
-    console.print(*providers)
     provider_controller = ProviderController(*providers)
     
     names = [p.anime.name for p in providers]
@@ -99,6 +101,9 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
         
     output_dir.mkdir(exist_ok=True)
 
+    console.print("[bold]Providers: [/]",*[p.__class__.__name__ for p in providers])
+    console.print("[bold]Output dir:[/] ",f"'{output_dir.absolute()}'")
+    
     for i,episode in enumerate(provider_controller.episodes):
         # if i == 0:
         #     first_episode: EpisodeController = episode
