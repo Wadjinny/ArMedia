@@ -99,24 +99,14 @@ def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None
     
     names = [p.anime.name for p in providers]
     output_dir = Path(f"{names[0]}")
+    
     if path is not None:
         output_dir = Path(path) / output_dir
         
-    output_dir.mkdir(exist_ok=True)
-
     console.print("[bold yellow]Providers: [/]",*[p.__class__.__name__ for p in providers])
     console.print("[bold yellow]Output dir:[/] ",f"'{output_dir.absolute()}'")
     
-    for i,episode in enumerate(provider_controller.episodes):
-        # if i == 0:
-        #     first_episode: EpisodeController = episode
-        #     provider_servers = first_episode.servers
-            # filtered = [
-            #     [s for s in provider_servers if isinstance(s.episode.provider, p_cls) and s.test()]
-            #     for p_cls in search_providers
-            # ]
-            # die(filtered=filtered)
-            
+    for i,episode in enumerate(provider_controller.episodes):  
         for i,server in enumerate(episode.servers):
             with console.status(f"Trying {server} :{i+1}/{len(episode.servers)}: {server.episode.provider.__class__.__name__}", spinner="dots"):
                 if not server.test():
