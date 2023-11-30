@@ -4,5 +4,5 @@ gdown
 mediafire-dl @ git+https://github.com/Juvenal-Yescas/mediafire-dl
 httpx
 typer[all]
-jmsepath
+jmespath
 m3u8_To_MP4
