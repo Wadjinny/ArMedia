@@ -1,0 +1,6 @@
+requests
+beautifulsoup4
+gdown
+mediafire-dl @ git+https://github.com/Juvenal-Yescas/mediafire-dl
+httpx
+typer[all]
