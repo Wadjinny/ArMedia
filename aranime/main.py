@@ -38,7 +38,7 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
 
         animes.append(search_result)
         results.append(
-            [f"{anime.episode_count} EPS. {anime.name}" for anime in search_result]
+            [f"{anime.name} [bold yellow]{anime.episode_count}EPS[/]" for anime in search_result]
         )
         columns.append(provider.__name__)
     if len(results) == 0:
@@ -99,8 +99,8 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
         
     output_dir.mkdir(exist_ok=True)
 
-    console.print("[bold]Providers: [/]",*[p.__class__.__name__ for p in providers])
-    console.print("[bold]Output dir:[/] ",f"'{output_dir.absolute()}'")
+    console.print("[bold yellow]Providers: [/]",*[p.__class__.__name__ for p in providers])
+    console.print("[bold yellow]Output dir:[/] ",f"'{output_dir.absolute()}'")
     
     for i,episode in enumerate(provider_controller.episodes):
         # if i == 0:
