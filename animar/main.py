@@ -21,8 +21,8 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)]):
     animes = []
     to_pop = []
     search_providers = [
-        # WitAnime,
-        # AnimeSanka,
+        WitAnime,
+        AnimeSanka,
         ZimaBdk,
     ]
     for i, provider in enumerate(search_providers):
