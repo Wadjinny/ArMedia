@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from pathlib import Path
-from animar.utils import die,debug
+from aranime.utils import die,debug
 import requests
 from tqdm import tqdm
 

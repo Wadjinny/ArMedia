@@ -22,17 +22,17 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.columns import Columns
 from rich.live import Live
-from animar.utils import zip_extend
-from animar.provider_wrapper import (
+from aranime.utils import zip_extend
+from aranime.provider_wrapper import (
     WitAnime,
     AnimeSanka,
     ZimaBdk,
     ProviderController,
     EpisodeController,
 )
-from animar.anime_interface import Anime, Episode, Server
-from animar.utils.file_downloader import DownloadFile
-from animar.utils import die, debug
+from aranime.anime_interface import Anime, Episode, Server
+from aranime.utils.file_downloader import DownloadFile
+from aranime.utils import die, debug
 from pathlib import Path
 
 console = Console()

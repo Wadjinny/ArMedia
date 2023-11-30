@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import json
-from animar.utils.file_downloader import download_file
+from aranime.utils.file_downloader import download_file
 from pathlib import Path
 
 filter_function = lambda x: "uploadourvideo.com" in x

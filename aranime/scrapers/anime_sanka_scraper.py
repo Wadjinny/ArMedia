@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from pprint import pprint
-from animar.utils import debug, die
+from aranime.utils import debug, die
 
 
 def get_search_results_link(search_term) -> list[dict[str, str]]:

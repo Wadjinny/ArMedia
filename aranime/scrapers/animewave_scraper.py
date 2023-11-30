@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from pprint import pprint
-from animar.utils import die
+from aranime.utils import die
 
 
 def search_anime(search_term):

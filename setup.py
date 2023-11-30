@@ -6,7 +6,7 @@ with open("requirements.txt") as f:
 long_description = "Download anime with arabic sub from public websites"
 
 setup(
-    name="animar",
+    name="aranime",
     version="1.0.0",
     author="ilyas wadjinny",
     description="Download anime with arabic sub ",
@@ -17,7 +17,7 @@ setup(
     include_package_data=True,
     entry_points={
         "console_scripts": [
-            "zanimar = animar.main:run",
+            "aranime = aranime.main:run",
         ]
     },
     install_requires=requirements,

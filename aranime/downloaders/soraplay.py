@@ -5,7 +5,7 @@ from urllib.parse import quote
 from bs4 import BeautifulSoup
 from pprint import pprint
 from ..utils import debug, die
-from animar.utils.file_downloader import download_file
+from aranime.utils.file_downloader import download_file
 
 
 

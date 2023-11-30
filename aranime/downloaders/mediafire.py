@@ -2,7 +2,7 @@ import mediafire_dl
 import requests
 import re
 from pathlib import Path
-from animar.utils.file_downloader import download_file,die
+from aranime.utils.file_downloader import download_file,die
 
 filter_function = lambda x: "mediafire.com" in x
 priority = 11

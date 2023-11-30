@@ -4,7 +4,7 @@ import re
 from urllib.parse import quote
 from bs4 import BeautifulSoup
 from pprint import pprint
-from animar.utils import debug, die
+from aranime.utils import debug, die
 from urllib.parse import urlencode
 import jmespath
 

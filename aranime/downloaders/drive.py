@@ -3,8 +3,8 @@ import gdown
 from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
-from animar.utils.file_downloader import download_file
-from animar.utils import die
+from aranime.utils.file_downloader import download_file
+from aranime.utils import die
 import json
 
 

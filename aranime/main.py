@@ -1,13 +1,13 @@
 import typer
 from rich.console import Console
-from animar.provider_wrapper import (
+from aranime.provider_wrapper import (
     WitAnime,
     AnimeSanka,
     ZimaBdk,
     ProviderController,
     EpisodeController,
 )
-from animar.anime_interface import Anime
+from aranime.anime_interface import Anime
 from rich.table import Table
 from rich.prompt import Prompt
 from pathlib import Path
