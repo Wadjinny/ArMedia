@@ -109,13 +109,13 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
         #     first_episode: EpisodeController = episode
         #     provider_servers = first_episode.servers
             # filtered = [
-            #     [s for s in provider_servers if isinstance(s.episode.provider, p_cls)]
+            #     [s for s in provider_servers if isinstance(s.episode.provider, p_cls) and s.test()]
             #     for p_cls in search_providers
             # ]
             # die(filtered=filtered)
             
-        for server in episode.servers:
-            with console.status(f"Trying {server}", spinner="dots"):
+        for i,server in enumerate(episode.servers):
+            with console.status(f"Trying {server} :{i+1}/{len(episode.servers)}: {server.episode.provider.__class__.__name__}", spinner="dots"):
                 if not server.test():
                     continue
 
