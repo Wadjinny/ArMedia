@@ -2,9 +2,20 @@ from .provider_wrapper.base_provider import Provider
 from .scrapers.animewave_scraper import search_anime
 from .utils import debug, die
 from .utils.file_downloader import download_file
-from .downloaders import drive, mediafire, meganz, dropbox, okru, uploadourvideo, soraplay, stream_wish
+from .downloaders import (
+    drive,
+    mediafire,
+    meganz,
+    dropbox,
+    okru,
+    uploadourvideo,
+    soraplay,
+    stream_wish,
+    shahidha,
+)
 import re
 from tqdm import tqdm
+
 
 class Anime:
     def __init__(
@@ -46,7 +57,7 @@ class Episode:
             return self.provider.episode_servers(self)
         else:
             return self._servers
-    
+
     def __repr__(self) -> str:
         base = f"Episode("
         for k, v in self.__dict__.items():
@@ -56,52 +67,50 @@ class Episode:
         base = base[:-1]
         base += ")"
         return base
-    
 
 
 class Server:
-    def __init__(self, link:str, episode:Episode=None):
+    def __init__(self, link: str, episode: Episode = None):
         self.episode = episode
         self.link = link
         self.downloader = self.is_downloadable(self.link)
         self.priority = self.downloader.priority
-        
+
     def __repr__(self) -> str:
         repr = re.findall(r"//(.*?)/", self.link)[0]
         return repr
-        
+
     @staticmethod
     def is_downloadable(link):
         available_downloaders = [
             drive,
             mediafire,
             meganz,
-            okru, 
-            uploadourvideo, 
+            okru,
+            uploadourvideo,
             soraplay,
             dropbox,
-            stream_wish
-            ]
+            stream_wish,
+            shahidha,
+        ]
         for downloader in available_downloaders:
             if downloader.filter_function(link):
                 return downloader
         return False
-    
+
     def test(self):
-        return self.downloader.download(self.link,None,None,return_url=True)
+        return self.downloader.download(self.link, None, None, return_url=True)
 
     def download(self, output_dir):
         file_name = f"{self.episode.provider.anime.name}_EP{self.episode.number}.mp4"
-        
-        desc=f"EP{self.episode.number}:{self}"
+
+        desc = f"EP{self.episode.number}:{self}"
         self.downloader.download(self.link, output_dir, file_name, desc=desc)
-        
+
         return True
-        
+
     # def get_downloader(self, output_dir):
     #     file_name = f"{self.episode.provider.anime.name}_EP{self.episode.number}.mp4"
     #     download_link = self.downloader.get_download_url(self.link)
     #     dowloader = DownloadFile(download_link, output_dir, file_name)
     #     return dowloader
-
-    

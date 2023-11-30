@@ -4,6 +4,7 @@ from aranime.provider_wrapper import (
     WitAnime,
     AnimeSanka,
     ZimaBdk,
+    AnimeIat,
     ProviderController,
     EpisodeController,
 )
@@ -20,8 +21,6 @@ console = Console()
 
 
 def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
-    # name = Prompt.ask("Enter anime name")
-    # anime_name = "mf ghost"
     columns = ["id"]
 
     results = []
@@ -31,6 +30,7 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option
         AnimeSanka,
         WitAnime,
         ZimaBdk,
+        AnimeIat,
     ]
     for i, provider in enumerate(search_providers):
         search_result = provider.search_anime(anime_name)
