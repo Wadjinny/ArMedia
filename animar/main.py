@@ -1,18 +1,25 @@
 import typer
 from rich.console import Console
-from animar.provider_wrapper import WitAnime, AnimeSanka, ZimaBdk, ProviderController
+from animar.provider_wrapper import (
+    WitAnime,
+    AnimeSanka,
+    ZimaBdk,
+    ProviderController,
+    EpisodeController,
+)
 from animar.anime_interface import Anime
 from rich.table import Table
 from rich.prompt import Prompt
 from pathlib import Path
-from .utils import zip_extend
+from .utils import zip_extend, die
 from time import sleep
 from typing_extensions import Annotated
-
+from rich.panel import Panel
+import os
 console = Console()
 
 
-def main(anime_name: Annotated[str, typer.Option(prompt=True)]):
+def main(anime_name: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH")):
     # name = Prompt.ask("Enter anime name")
     # anime_name = "mf ghost"
     columns = ["id"]
@@ -21,8 +28,8 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)]):
     animes = []
     to_pop = []
     search_providers = [
-        WitAnime,
         AnimeSanka,
+        WitAnime,
         ZimaBdk,
     ]
     for i, provider in enumerate(search_providers):
@@ -51,7 +58,7 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)]):
         show_edge=False,
         show_lines=False,
         show_footer=False,
-        row_styles=["", "on #333d3d"],
+        row_styles=["", "white on #333d3d"],
         expand=True,
     )
     for i, animes_all in enumerate(table_anime):
@@ -84,15 +91,33 @@ def main(anime_name: Annotated[str, typer.Option(prompt=True)]):
     console.clear()
     console.print(*providers)
     provider_controller = ProviderController(*providers)
-
-    output_dir = Path("output")
+    
+    names = [p.anime.name for p in providers]
+    output_dir = Path(f"{names[0]}")
+    if path is not None:
+        output_dir = Path(path) / output_dir
+        
     output_dir.mkdir(exist_ok=True)
 
-    for episode in provider_controller.episodes:
+    for i,episode in enumerate(provider_controller.episodes):
+        # if i == 0:
+        #     first_episode: EpisodeController = episode
+        #     provider_servers = first_episode.servers
+            # filtered = [
+            #     [s for s in provider_servers if isinstance(s.episode.provider, p_cls)]
+            #     for p_cls in search_providers
+            # ]
+            # die(filtered=filtered)
+            
         for server in episode.servers:
             with console.status(f"Trying {server}", spinner="dots"):
                 if not server.test():
                     continue
+
+            console.print(
+                f"'{server.episode.provider.__class__.__name__}'/'EP{episode.number}': '{server}'",
+                markup=False,
+            )
             if server.download(output_dir=output_dir):
                 break
 

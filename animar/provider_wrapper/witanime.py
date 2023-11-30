@@ -32,8 +32,8 @@ class WitAnime(Provider):
     def _request_episodes(self):
         episode_info = get_episodes_list(self.anime.link)
         episodes = []
-        for i, episode_url in enumerate(episode_info):
-            episodes.append(Episode(provider=self, link=episode_url, number=i + 1))
+        for ep_info in episode_info:
+            episodes.append(Episode(provider=self, **ep_info))
         return episodes
 
     def _episode_servers(self, episode: Episode) -> list["Server"]:

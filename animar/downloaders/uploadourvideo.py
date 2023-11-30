@@ -6,7 +6,7 @@ from animar.utils.file_downloader import download_file
 from pathlib import Path
 
 filter_function = lambda x: "uploadourvideo.com" in x
-priority = 6
+priority = 10
 
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
     session = requests.Session()

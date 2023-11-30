@@ -37,9 +37,14 @@ def get_episodes_list(anime_link) -> list[str]:
     response = response.text
     soup = BeautifulSoup(response, "html.parser")
     # .episodes-list a
-    links = soup.select(".episodes-list a")
-    links = [link["href"] for link in links]
-    return links[::-1]
+    info = soup.select(".episodes-list a")
+    # links = [link["href"] for link in links]
+    episodes = []
+    for i in info:
+        number = i.select_one("strong").text
+        link = i["href"]
+        episodes.append({"number": number, "link": link})
+    return episodes[::-1]
 
 
 def get_all_episodes_server_link(episode_link):
@@ -55,25 +60,27 @@ def get_all_episodes_server_link(episode_link):
         if "megamax.me/iframe" in link:
             link = link.strip()
             response = requests.request("GET", link)
-            version = re.search(r'version&quot;:&quot;(.+?)&quot;', response.text).group(1)
+            version = re.search(
+                r"version&quot;:&quot;(.+?)&quot;", response.text
+            ).group(1)
             headers = {
                 "cookie": "XSRF-TOKEN=eyJpdiI6IjMrODBCRXd6SXVzbzY5RXRsUWMzbVE9PSIsInZhbHVlIjoiYmRBRnJwMmFOc01JSDlVU3JhNHR1OFFtNHpzdDNxV2xkRmdGNVdqOVU5N2Q3TG91T0ROaUk4KzNWaDZXSWpJeFVIdE0zRG9NMkx2NnFZajVjYXBObFFBSnNNb1k4cUg0cXU4aGJqYkJpTWk3WjJKZWR0V21BZm5NTm9jU1lFdzYiLCJtYWMiOiI1OGJkYWU0ODQ4NWQwY2U5MjdlODE2YTkyMWU1MjU4YzVjZDg3NjI1M2VlYWM2MTljOTY2YzlmZGJiMjY5M2RiIiwidGFnIjoiIn0%253D; megamax_session=eyJpdiI6IlhJc3NzbTNIRFhIR3JqbDI0U2dPMVE9PSIsInZhbHVlIjoidEtpTkVGMXhReXRVSVZ4KzRmN091cEpIeVdSUmY3SXFwaUtoV2w0bmwwUWtmMm9ibzZwQnFUTXNOYUN1R0E4SUVIRnZmZStpK0QyL2tLdXhBaHpLaUNBZkN0SEpYSHFHVkNPYUoraStPK2s1YVJxT2pNa1BqUHR0bUFzSTdjeVoiLCJtYWMiOiJkM2YyYmNhYjUxN2I0Y2Y0YjhmNTI5NjNjODNmMjRjMTcwMDU5ZTlmMGUzZGFkMTc5NmQzYjU4YWJlNDEyMTQ3IiwidGFnIjoiIn0%253D",
                 "x-inertia": "true",
                 "x-inertia-partial-component": "web/files/mirror/video",
                 "x-inertia-partial-data": "streams",
-                "x-inertia-version": version
+                "x-inertia-version": version,
             }
             response = requests.request("GET", link, headers=headers)
             path = "@.props.streams.data[].mirrors[].link"
             megamax_servers = jmespath.search(path, response.json())
-            
-            # die(megamax_servers)
-            
-            for i,s in enumerate(megamax_servers):
+
+            for i, s in enumerate(megamax_servers):
                 if s.startswith("//"):
                     megamax_servers[i] = "https:" + s
-                    
-    return server_links + download_link + megamax_servers   
+            server_links.extend(megamax_servers)
+
+    return server_links + download_link
+
 
 # import requests
 
@@ -90,4 +97,7 @@ def get_all_episodes_server_link(episode_link):
 
 # print(response.text)
 
-get_all_episodes_server_link("https://www.zimabadk.com/yurei-deco-الحلقة-1/")
+# get_all_episodes_server_link("https://www.zimabadk.com/yurei-deco-الحلقة-1/")
+
+if __name__=="__main__":
+    print(get_episodes_list("https://www.zimabadk.com/anime/migi-to-dali/"))

@@ -15,9 +15,11 @@ def download_from_server(server_link):
 
 
 def join_list_of_list(list_of_list):
+    result = []
     for l in list_of_list:
-        for i in l:
-            yield i
+        result.extend(l)
+    return result
+            
 
 
 def die(*argument, **kwarg):

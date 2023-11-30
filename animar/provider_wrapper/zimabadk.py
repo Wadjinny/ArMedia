@@ -2,7 +2,7 @@ from time import sleep
 from rich.console import Console
 from .base_provider import Provider
 from ..anime_interface import Anime, Episode, Server
-from ..scrapers.zimabdk_scraper import (
+from ..scrapers.zimabadk_scraper import (
     get_search_results_link,
     get_all_episodes_server_link,
     get_episodes_list,
@@ -30,10 +30,10 @@ class ZimaBdk(Provider):
         return result
 
     def _request_episodes(self):
-        episode_info = get_episodes_list(self.anime.link)
+        episodes_info = get_episodes_list(self.anime.link)
         episodes = []
-        for i, episode_url in enumerate(episode_info):
-            episodes.append(Episode(provider=self, link=episode_url, number=i + 1))
+        for ep_info in episodes_info:
+            episodes.append(Episode(provider=self, **ep_info))
         return episodes
 
     def _episode_servers(self, episode: Episode) -> list["Server"]:

@@ -170,7 +170,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
             print(option_lines)
             print(response)
             raise e
-    return episodes_list
+    return episodes_list[::-1]
 
 
 if __name__ == "__main__":

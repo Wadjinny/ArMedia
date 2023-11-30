@@ -10,6 +10,7 @@ class EpisodeController:
     def __init__(self, anime: "Anime", episodes: list["Episode"], number: str) -> None:
         self.anime = anime
         self.servers:list["Server"] = join_list_of_list(episode.find_servers for episode in episodes)
+        self.servers = sorted(self.servers, key=lambda s: s.priority, reverse=True)
         self.is_dowloaded = False
         self.number = number
 
@@ -27,7 +28,7 @@ class Provider:
     def _request_episodes(self):
         raise NotImplementedError
 
-    def _episode_servers(self,episodes: "Episode"):
+    def _episode_servers(self,episodes: "Episode")->list["Server"]:
         raise NotImplementedError
 
 
@@ -38,10 +39,6 @@ class Provider:
 
     def episode_servers(self, episode:"Episode")->list["Server"]:
         servers = self._episode_servers(episode)
-        servers = sorted(servers, key=lambda s: s.priority, reverse=True)
-        servers_name = [str(s) for s in servers]
-        servers_count = [f"[{servers_name.count(s)}]{s}" for s in set(servers_name)]
-        console.print(f"'{self.__class__.__name__}'/'{self.anime.name}'/'EP{episode.number}': '{', '.join(servers_count)}'", markup=False)
         return servers
 
     @classmethod
@@ -78,9 +75,9 @@ class ProviderController:
         if self.episodes_len is None:
             self.episodes_len = len(self.providers[0].episodes)
         for i in range(self.episodes_len):
-            episode_for_each_provider = []
+            episodes_for_each_provider = []
             for provider in self.providers:
-                episode_for_each_provider.append(provider.episodes[i])
+                episodes_for_each_provider.append(provider.episodes[i])
             yield EpisodeController(
-                self, episodes=episode_for_each_provider, number=f"{i}"
+                self, episodes=episodes_for_each_provider, number=f"{i+1}"
             )

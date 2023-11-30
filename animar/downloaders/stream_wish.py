@@ -10,7 +10,7 @@ import json
 
 
 filter_function = lambda x: "anime4low.sb" in x
-priority = 13
+priority = 6
 
 
 

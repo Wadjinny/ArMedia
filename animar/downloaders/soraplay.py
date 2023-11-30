@@ -10,7 +10,7 @@ from animar.utils.file_downloader import download_file
 
 
 filter_function = lambda x: ("soraplay.xyz/embed" in x) and ("mirror" not in x)
-priority = 5
+priority = 10
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
     session = requests.Session()
     session.headers.update({"Referer": "https://witanime.pics/"})

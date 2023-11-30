@@ -4,7 +4,7 @@ import re
 from urllib.parse import quote
 from bs4 import BeautifulSoup
 from pprint import pprint
-from ..utils import debug, die
+from animar.utils import debug, die
 
 site_extension = "pics"
 
@@ -27,13 +27,16 @@ def get_episodes_list(anime_link) -> list[str]:
     response = requests.request("GET", anime_link, timeout=100)
     response = response.text
     soup = BeautifulSoup(response, "html.parser")
-    episodes = soup.select(".hover.ehover6>.overlay")
-    episodes_links = []
+    episodes = soup.select(".hover.ehover6")
+    episodes_info = []
     for episode in episodes:
-        episode = re.search(r"openEpisode\('(.*)'\)", episode["onclick"]).group(1)
-        episode = base64.b64decode(episode).decode("utf-8")
-        episodes_links.append(episode)
-    return episodes_links
+        link = re.search(r"openEpisode\('(.*)'\)", episode.select_one(".overlay")["onclick"]).group(1)
+        link = base64.b64decode(link).decode("utf-8")
+        number = episode.select_one("h3 > a").text
+        number = re.sub(r"[^\x00-\x7f]", r"", number)
+        
+        episodes_info.append({"link": link, "number": number})
+    return episodes_info
 
 
 def get_all_episodes_server_link(episode_link):
@@ -104,4 +107,5 @@ def get_all_episodes_server_link(episode_link):
     return server_links
 
 
-# pprint(get_search_results_link("Fate/kaleid liner Prisma"))
+if __name__ == "__main__":
+    print(get_episodes_list("https://witanime.pics/anime/itsudatte-bokura-no-koi-wa-10-cm-datta/"))
