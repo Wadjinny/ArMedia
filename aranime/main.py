@@ -23,9 +23,8 @@ console = Console()
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
 @app.command()
-def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
+def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIME_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
     columns = ["id"]
-    die(path=path)
     results = []
     animes = []
     to_pop = []
