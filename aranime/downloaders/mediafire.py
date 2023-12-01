@@ -1,7 +1,8 @@
 import requests
 import re
 from pathlib import Path
-from aranime.utils.file_downloader import download_file,die
+from aranime.utils.file_downloader import download_file
+from aranime.utils import die
 
 filter_function = lambda x: "mediafire.com" in x
 priority = 11
