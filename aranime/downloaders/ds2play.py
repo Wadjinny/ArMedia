@@ -31,6 +31,8 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
     download_url = url_first_part+pass_key+token+str(expiry)
     session = requests.Session()
     session.headers.update(headers)
+    if return_url:
+        return download_url
     return download_file(download_url, output_dir, file_name, session=session, desc=desc)
     
     

@@ -10,11 +10,8 @@ import re
 class DownloadFile:
     def __init__(self, url, output_dir, file_name=None, session=None) -> None:
         self.url = url
-        self.output_dir = str(output_dir)
-        #remove any non permitted characters for file name
-        self.output_dir = re.sub(r"[^\x00-\x7f]", r"_", self.output_dir)
-        self.file_name = str(file_name)
-        self.file_name = re.sub(r"[^\x00-\x7f]", r"_", self.file_name)
+        self.output_dir = output_dir
+        self.file_name = file_name
         self.session = session
         self.CHUNK_SIZE = 1024 * 128  # 128 kilobyte
         self.downloaded_size = 0

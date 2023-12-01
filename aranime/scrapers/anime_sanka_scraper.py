@@ -110,10 +110,13 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
     if id is not None:
         id = id.group(1)
     else:
-        print(f"No episodes found for {anime_link}")
+        soup = BeautifulSoup(response, "html.parser")
+        # # div.radio > label has data-link
+        # id = soup.select_one("div.radio > label:[data-link]")["data-link"]
+        # die(id=id)
+        print(f"1 .No episodes found for {anime_link}")
         return []
     url = f"https://prwd.animesanka.club/feeds/posts/default/{id}?alt=json-in-script"
-
     payload = {}
     headers = {
         "authority": "prwd.animesanka.club",
@@ -139,8 +142,15 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
     # select all line with <option
     option_lines = re.findall(r"<option(.*?)<\/option>", response, re.S)
     if len(option_lines) == 0:
-        print(f"No episodes found for {anime_link}")
-        return []
+        # print(f"2 .No episodes found for {anime_link}")
+        first_regex = r"href=\"(.*?)\""
+        second_regex = r"data-link=\"(.*?)\""
+        first_links = re.findall(first_regex, response, re.S)
+        second_links = re.findall(second_regex, response, re.S)
+        links = first_links + second_links
+        return [("1", links)]
+        
+        
     episodes_list = []
     # identify if its a movie or a serie
     if "@" in option_lines[0]:
@@ -177,4 +187,5 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
 
 
 if __name__ == "__main__":
-    pprint(get_search_results_link("koutetsujou no kabaneri"))
+    anime_link = "https://www.anime-sanka.com/2019/03/brave-story-1080p.html"
+    debug(get_all_episodes_server_link(anime_link))

@@ -5,7 +5,6 @@ from aranime.provider_wrapper import (
     AnimeSanka,
     ZimaBdk,
     AnimeIat,
-    EgyDead,
     ProviderController,
     EpisodeController,
 )
@@ -16,6 +15,8 @@ from pathlib import Path
 from .utils import zip_extend, die
 from time import sleep
 from typing_extensions import Annotated
+import re
+
 
 console = Console()
 
@@ -24,7 +25,7 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 @app.command()
 def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIM_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
     columns = ["id"]
-
+    die(path=path)
     results = []
     animes = []
     to_pop = []
@@ -33,7 +34,6 @@ def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None
         WitAnime,
         ZimaBdk,
         AnimeIat,
-        # EgyDead,
     ]
     for i, provider in enumerate(search_providers):
         search_result = provider.search_anime(anime)
@@ -97,11 +97,14 @@ def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None
     console.clear()
     provider_controller = ProviderController(*providers)
     
-    names = [p.anime.name for p in providers]
-    output_dir = Path(f"{names[0]}")
+    dir_name = min([p.anime.name for p in providers],key=len)
+    
+    dir_name = re.sub(r'[<>:"/\\|?*]', '', dir_name)
     
     if path is not None:
-        output_dir = Path(path) / output_dir
+        output_dir = Path(path) / dir_name
+    else:
+        output_dir = Path(dir_name)
         
     console.print("[bold yellow]Providers: [/]",*[p.__class__.__name__ for p in providers])
     console.print("[bold yellow]Output dir:[/] ",f"'{output_dir.absolute()}'")
