@@ -22,8 +22,15 @@ console = Console()
 
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
+
 @app.command()
-def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None,envvar="ARANIME_PATH"),witanime:bool=True,animarsanka:bool=True,zimabdk:bool=True):
+def main(
+    anime: Annotated[str, typer.Option(prompt=True)],
+    path=typer.Option(None, envvar="ARANIME_PATH"),
+    witanime: bool = True,
+    animarsanka: bool = True,
+    zimabdk: bool = True,
+):
     columns = ["id"]
     results = []
     animes = []
@@ -41,8 +48,12 @@ def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None
             continue
 
         animes.append(search_result)
+
         results.append(
-            [f"{anime.name} [bold yellow]{anime.episode_count}EPS[/]" for anime in search_result]
+            [
+                f"{anime_res.name.lower().replace(anime,'[bold #cfeffc]'+anime+'[/]')} [bold yellow]{anime_res.episode_count}EPS[/]"
+                for anime_res in search_result
+            ]
         )
         columns.append(provider.__name__)
     if len(results) == 0:
@@ -68,25 +79,46 @@ def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None
     console.print(table)
 
     while True:
-        anime_indecies = Prompt.ask("Choose the anime number")
+        anime_indecies = Prompt.ask("\n[bold]Choose the anime number[/]")
         try:
             anime_indecies = [int(i) for i in anime_indecies.split(" ")]
         except ValueError:
-            console.print("you must enter numbers")
+            console.print("  :no_entry: You must enter [red]numbers[/] \n")
             continue
 
         if len(anime_indecies) == 1:
             anime_indecies = anime_indecies * len(search_providers)
-            
+
         if len(anime_indecies) != len(columns) - 1:
-            console.print(f"you must choose {len(columns) - 1 } animes")
+            console.print(
+                f"  :no_entry: You must choose [red]{len(columns) - 1 } animes[/] \n"
+            )
             continue
 
         if not all(0 <= ind <= len(animes[i]) for i, ind in enumerate(anime_indecies)):
-            console.print(f"you must choose animes between 0[deselect] and id of anime")
+            console.print(
+                f"  :no_entry: You must choose animes between [red]0 [dim]deselect[/] and {len(animes[i])}[/] \n"
+            )
+
+            continue
+        if (
+            len(
+                set(
+                    animes[i][ind - 1].episode_count
+                    for i, ind in enumerate(anime_indecies)
+                    if ind != 0
+                )
+            )
+            > 1
+        ):
+            console.print(
+                f"  :no_entry: You must choose animes with the [red]same episode count[/] \n"
+            )
+            continue
+        if all(ind == 0 for ind in anime_indecies):
+            console.print("  :no_entry: You must choose [red]at least one anime[/] \n")
             continue
         break
-        
 
     providers = [
         provider_cls(anime[index - 1])
@@ -95,22 +127,27 @@ def main(anime: Annotated[str, typer.Option(prompt=True)],path=typer.Option(None
     ]
     console.clear()
     provider_controller = ProviderController(*providers)
-    
-    dir_name = min([p.anime.name for p in providers],key=len)
-    
-    dir_name = re.sub(r'[<>:"/\\|?*]', '', dir_name)
-    
+
+    dir_name = min([p.anime.name for p in providers], key=len)
+
+    dir_name = re.sub(r'[<>:"/\\|?*]', "", dir_name)
+
     if path is not None:
         output_dir = Path(path) / dir_name
     else:
         output_dir = Path(dir_name)
-        
-    console.print("[bold yellow]Providers: [/]",*[p.__class__.__name__ for p in providers])
-    console.print("[bold yellow]Output dir:[/] ",f"'{output_dir.absolute()}'")
-    
-    for i,episode in enumerate(provider_controller.episodes):  
-        for i,server in enumerate(episode.servers):
-            with console.status(f"Trying {server} :{i+1}/{len(episode.servers)}: {server.episode.provider.__class__.__name__}", spinner="dots"):
+
+    console.print(
+        "[bold yellow]Providers: [/]", *[p.__class__.__name__ for p in providers]
+    )
+    console.print("[bold yellow]Output dir:[/] ", f"'{output_dir.absolute()}'")
+
+    for i, episode in enumerate(provider_controller.episodes):
+        for i, server in enumerate(episode.servers):
+            with console.status(
+                f"Trying {server} :{i+1}/{len(episode.servers)}: {server.episode.provider.__class__.__name__}",
+                spinner="dots",
+            ):
                 if not server.test():
                     continue
 

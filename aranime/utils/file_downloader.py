@@ -5,6 +5,8 @@ from pathlib import Path
 import logging
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
+
+
 async def maybe_coro(coro, *args, **kwargs):
     loop = asyncio.get_running_loop()
 
@@ -13,8 +15,8 @@ async def maybe_coro(coro, *args, **kwargs):
     else:
         return await loop.run_in_executor(None, coro, *args, **kwargs)
 
-class MultiConnectionDownloader:
 
+class MultiConnectionDownloader:
     MINIMUM_PART_SIZE = 1024**2
 
     def __init__(
@@ -44,7 +46,6 @@ class MultiConnectionDownloader:
         future=None,
         pause_event=None,
     ):
-
         headers = self.kwargs.pop("headers", {})
         content_length = end
         position = start or 0
@@ -53,7 +54,6 @@ class MultiConnectionDownloader:
         is_downloading = lambda: (pause_event is None or not pause_event.is_set())
 
         while is_downloading() and is_incomplete():
-
             if content_length is None:
                 if start is not None:
                     headers["Range"] = f"bytes={position}-"
@@ -64,18 +64,15 @@ class MultiConnectionDownloader:
                 async with self.session.stream(
                     *self.args, **self.kwargs, headers=headers
                 ) as response:
-
                     content_length = (
                         int(response.headers.get("Content-Length", 0)) or None
                     )
 
                     if progress_bar is not None:
-
                         if content_length > 0:
                             progress_bar.total = content_length
 
                     async for chunk in response.aiter_bytes(8192):
-
                         chunk_size = len(chunk)
 
                         if self.progress_bar is not None:
@@ -120,7 +117,6 @@ class MultiConnectionDownloader:
         position: int,
         data: bytes,
     ):
-
         async with lock:
             await maybe_coro(io.seek, position)
             await maybe_coro(io.write, data)
@@ -173,7 +169,10 @@ class MultiConnectionDownloader:
                 "url": response.url,
             }
 
-async def download_async(url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32):
+
+async def download_async(
+    url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32
+):
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     session = httpx.AsyncClient(
         timeout=30.0,
@@ -189,7 +188,9 @@ async def download_async(url, output_dir, file_name=None, session=None, desc=Non
     head_response = await session.head(url)
 
     content_length = int(head_response.headers.get("Content-Length", 0))
-
+    # content_length is under 10mb
+    if content_length < 10 * 1024 * 1024:
+        raise Exception(f"{url} is under 10mb: {content_length//1024}kb")
     if file_name is None:
         disposition = head_response.headers.get("content-Disposition").split("; ")
         for i in disposition:
@@ -201,8 +202,6 @@ async def download_async(url, output_dir, file_name=None, session=None, desc=Non
 
     # Set the file path
     file_path = Path(output_dir) / file_name
-        
-
 
     progress_bar.total = content_length
     progress_bar.set_description(desc)
@@ -221,12 +220,13 @@ async def download_async(url, output_dir, file_name=None, session=None, desc=Non
 
     await session.aclose()
 
+
 def download_file(url, output_dir, file_name=None, session=None, desc=None):
     loop = asyncio.new_event_loop()
     loop.run_until_complete(download_async(url, output_dir, file_name, session, desc))
     loop.close()
 
+
 if __name__ == "__main__":
     link = "https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-desktop-amd64.iso"
     download_file(link, ".", "test.iso")
-    
