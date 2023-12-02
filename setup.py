@@ -17,7 +17,7 @@ setup(
     include_package_data=True,
     entry_points={
         "console_scripts": [
-            "aranime = aranime.main:run",
+            "aranime = aranime.__main__:run",
         ]
     },
     install_requires=requirements,

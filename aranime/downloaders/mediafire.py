@@ -5,7 +5,7 @@ from aranime.utils.file_downloader import download_file
 from aranime.utils import die
 
 filter_function = lambda x: "mediafire.com" in x
-priority = 11
+priority = 4
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
     def extractDownloadLink(contents):
         for line in contents.splitlines():
@@ -21,7 +21,7 @@ def download(server_link, output_dir, file_name, desc=None,return_url=False):
         return False
     if return_url:
         return download_url
-    return download_file(download_url, output_dir, file_name, desc=desc)
+    return download_file(download_url, output_dir, file_name, desc=desc, CONNECTIONS=3)
 
 
 

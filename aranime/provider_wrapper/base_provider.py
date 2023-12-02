@@ -1,4 +1,4 @@
-from ..utils import join_list_of_list,die,debug
+from ..utils import join_list_of_list,die,debug,zip_extend
 from typing import TYPE_CHECKING
 from rich.console import Console
 
@@ -25,14 +25,14 @@ class Provider:
     def __init_subclass__(cls) -> None:
         Provider.providers.append(cls)
 
-    def _request_episodes(self):
+    def _request_episodes(self)->list["Episode"]:
         raise NotImplementedError
 
     def _episode_servers(self,episodes: "Episode")->list["Server"]:
         raise NotImplementedError
 
 
-    def request_episodes(self):
+    def request_episodes(self)->None:
         if self.anime.link is None:
             raise ValueError("anime url is None")
         self._episodes = self._request_episodes()
@@ -42,15 +42,15 @@ class Provider:
         return servers
 
     @classmethod
-    def _search_anime(cls,search_term: str):
+    def _search_anime(cls,search_term: str)->list["Anime"]:
         raise NotImplementedError
     
     @classmethod
-    def search_anime(cls, search_term: str):
+    def search_anime(cls, search_term: str)->list["Anime"]:
         return cls._search_anime(search_term)
         
     @property
-    def episodes(self):
+    def episodes(self)->list["Episode"]:
         if self._episodes is None:
             self._request_episodes()
         return self._episodes
@@ -65,19 +65,20 @@ class ProviderController:
         for provider in self.providers:
             with console.status(f"requesting episodes from {provider.__class__.__name__}"):
                 provider.request_episodes()
-        episodes_len = [len(provider.episodes) for provider in self.providers]
-        if not all(i == episodes_len[0] for i in episodes_len):
-            raise ValueError(f"all providers must have same number of episodes: {episodes_len}, {[p.anime.link for p in self.providers]}")
-        self.episodes_len = None
+        self.episodes_len = max([len(provider.episodes) for provider in self.providers])
+        # if not all(i == episodes_len[0] for i in episodes_len):
+        #     raise ValueError(f"all providers must have same number of episodes: {episodes_len}, {[p.anime.link for p in self.providers]}")
 
     @property
     def episodes(self):
         if self.episodes_len is None:
             self.episodes_len = len(self.providers[0].episodes)
-        for i in range(self.episodes_len):
-            episodes_for_each_provider = []
-            for provider in self.providers:
-                episodes_for_each_provider.append(provider.episodes[i])
+        # for i in range(self.episodes_len):
+        #     episodes_for_each_provider = []
+            # for provider in self.providers:
+            #     episodes_for_each_provider.append(provider.episodes[i])
+        episodes_X_provider = zip_extend(*[provider.episodes for provider in self.providers])
+        for i,episodes_for_each_provider in enumerate(episodes_X_provider):
             yield EpisodeController(
                 self, episodes=episodes_for_each_provider, number=f"{i+1}"
             )

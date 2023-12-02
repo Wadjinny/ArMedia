@@ -16,7 +16,7 @@ from .utils import zip_extend, die
 from time import sleep
 from typing_extensions import Annotated
 import re
-
+from rich.prompt import Prompt
 
 console = Console()
 
@@ -27,9 +27,6 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 def main(
     anime: Annotated[str, typer.Option(prompt=True)],
     path=typer.Option(None, envvar="ARANIME_PATH"),
-    witanime: bool = True,
-    animarsanka: bool = True,
-    zimabdk: bool = True,
 ):
     columns = ["id"]
     results = []
@@ -101,6 +98,10 @@ def main(
             )
 
             continue
+
+        if all(ind == 0 for ind in anime_indecies):
+            console.print("  :no_entry: You must choose [red]at least one anime[/] \n")
+            continue
         if (
             len(
                 set(
@@ -111,13 +112,13 @@ def main(
             )
             > 1
         ):
+            chosen_anime = '[bold yellow]\n   '+'\n   '.join(animes[i][ind - 1].name for i, ind in enumerate(anime_indecies) if ind != 0)+'[/]'
             console.print(
-                f"  :no_entry: You must choose animes with the [red]same episode count[/] \n"
+                f"You have chosen:{chosen_anime}"
             )
-            continue
-        if all(ind == 0 for ind in anime_indecies):
-            console.print("  :no_entry: You must choose [red]at least one anime[/] \n")
-            continue
+            user_choice = Prompt.ask(f" [bold yellow]Mismatch[/] episode count, Do you want to continue? [y/n]",default="n",choices=["y","n"])
+            if user_choice == "n":
+                continue
         break
 
     providers = [
@@ -152,7 +153,7 @@ def main(
                     continue
 
             console.print(
-                f"'{server.episode.provider.__class__.__name__}'/'EP{episode.number}->{provider_controller.episodes_len}': '{server}'",
+                f"'{server.episode.provider.__class__.__name__}'/'EP{episode.number}->{provider_controller.episodes_len}': '{server }:{i+1}/{len(episode.servers)}",
                 markup=False,
             )
             if server.download(output_dir=output_dir):

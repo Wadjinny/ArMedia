@@ -27,7 +27,7 @@ def die(*argument, **kwarg):
     exit()
     sys.exit()
 
-def zip_extend(*args):
+def zip_extend(*args,no_none=False):
     """
     >>> list(zip_extend([1,2,3],[4,5,6,7]))
     [(1, 4), (2, 5), (3, 6), (None, 7)]
@@ -35,7 +35,7 @@ def zip_extend(*args):
     args = [iter(i) for i in args]
     cursor = [next(i, None) for i in args]
     while any(cursor):
-        yield cursor
+        yield [i for i in cursor if i is not None] if no_none else cursor
         cursor = [next(i, None) for i in args]
 
 wait = 1

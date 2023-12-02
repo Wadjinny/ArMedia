@@ -17,19 +17,21 @@ class AnimeIat(Provider):
         super().__init__(anime)
 
     @classmethod
-    def _search_anime(cls, search_term: str):
+    def _search_anime(cls, search_term: str,show_episode_count=True)->list["Anime"]:
         result = get_search_results_link(search_term)
         result = [Anime(**i) for i in result]
-        with console.status(f"getting episode count for {cls.__name__}/{search_term}"):
-            for anime in result:
-                episodes = get_episodes_list(anime_link=anime.link)
-                anime.episode_count = len(episodes)
+        if show_episode_count:
+            for i,anime in enumerate(result):
+                with console.status(f"getting episode count for {cls.__name__}/{search_term}: [bold]{i+1}[/]/{len(result)}"):
+                    episodes = get_episodes_list(anime_link=anime.link)
+                    anime.episode_count = len(episodes)
+                
         if len(result) == 0:
             console.log(f'anime "{search_term}" not found in {cls.__name__}')
             return []
         return result
 
-    def _request_episodes(self):
+    def _request_episodes(self)->list["Episode"]:
         episodes_info = get_episodes_list(self.anime.link)
         episodes = []
         for ep_info in episodes_info:
