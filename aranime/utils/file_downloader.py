@@ -4,7 +4,7 @@ import httpx
 from pathlib import Path
 import logging
 from rich.console import Console
-
+import sniffio
 logging.getLogger("httpx").setLevel(logging.WARNING)
 console = Console()
 
@@ -105,6 +105,9 @@ class MultiConnectionDownloader:
                     locks += (self.progress_bar.get_lock(),)
 
                 # TODO: Warn user about the error.
+            except sniffio.AsyncLibraryNotFoundError:
+                console.print(f" [bold red]Stoping[/] the download")
+                
 
         if future is not None:
             future.set_result((start, position))
@@ -226,13 +229,9 @@ async def download_async(
 
 
 def download_file(url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32):
-    import sniffio
+
     loop = asyncio.new_event_loop()
-    try:
-        value = loop.run_until_complete(download_async(url, output_dir, file_name, session, desc, CONNECTIONS))
-    except sniffio.AsyncLibraryNotFoundError:
-        console.print(f" [bold red]Stoping[/] the download")
-        value = False
+    value = loop.run_until_complete(download_async(url, output_dir, file_name, session, desc, CONNECTIONS))
     loop.close()
     return value
 

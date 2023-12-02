@@ -152,11 +152,12 @@ def main(
                     continue
 
             console.print(
-                f"'{server.episode.provider.__class__.__name__}'/'EP{episode.number}': '{server}'",
+                f"'{server.episode.provider.__class__.__name__}'/'EP{episode.number}->{provider_controller.episodes_len}': '{server}'",
                 markup=False,
             )
             if server.download(output_dir=output_dir):
                 break
+            console.print(f"[bold red]Skipping[/]")
 
 
 def run():
