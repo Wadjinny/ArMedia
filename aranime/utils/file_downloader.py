@@ -221,13 +221,18 @@ async def download_async(
         downloaded_positions = await downloader.allocate_downloads(
             io, content_length, connections=CONNECTIONS
         )
-
     await session.aclose()
+    return True
 
 
 def download_file(url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32):
+    import sniffio
     loop = asyncio.new_event_loop()
-    value = loop.run_until_complete(download_async(url, output_dir, file_name, session, desc, CONNECTIONS))
+    try:
+        value = loop.run_until_complete(download_async(url, output_dir, file_name, session, desc, CONNECTIONS))
+    except sniffio.AsyncLibraryNotFoundError:
+        console.print(f" [bold red]Stoping[/] the download")
+        value = False
     loop.close()
     return value
 
