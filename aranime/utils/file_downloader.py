@@ -3,9 +3,10 @@ from tqdm import tqdm
 import httpx
 from pathlib import Path
 import logging
+from rich.console import Console
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
-
+console = Console()
 
 async def maybe_coro(coro, *args, **kwargs):
     loop = asyncio.get_running_loop()
@@ -177,6 +178,7 @@ async def download_async(
     session = httpx.AsyncClient(
         timeout=30.0,
         follow_redirects=True,
+        headers=None if session is None else session.headers,
     )
 
     progress_bar = tqdm(
@@ -190,7 +192,9 @@ async def download_async(
     content_length = int(head_response.headers.get("Content-Length", 0))
     # content_length is under 10mb
     if content_length < 10 * 1024 * 1024:
-        raise Exception(f"{url} is under 10mb: {content_length//1024}kb")
+        # raise Exception(f"{url} is under 10mb: {content_length//1024}kb")
+        console.print(f" The file is under 10mb: [bold red]{content_length//1024}kb[/], Skipping...")
+        return False
     if file_name is None:
         disposition = head_response.headers.get("content-Disposition").split("; ")
         for i in disposition:
@@ -221,10 +225,11 @@ async def download_async(
     await session.aclose()
 
 
-def download_file(url, output_dir, file_name=None, session=None, desc=None):
+def download_file(url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32):
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(download_async(url, output_dir, file_name, session, desc))
+    value = loop.run_until_complete(download_async(url, output_dir, file_name, session, desc, CONNECTIONS))
     loop.close()
+    return value
 
 
 if __name__ == "__main__":

@@ -106,9 +106,8 @@ class Server:
         file_name = f"{self.episode.provider.anime.name}_EP{self.episode.number}.mp4"
         file_name = re.sub(r'[<>:"/\\|?*]', '', file_name)
         desc = f"EP{self.episode.number}:{self}"
-        self.downloader.download(self.link, output_dir, file_name, desc=desc)
 
-        return True
+        return self.downloader.download(self.link, output_dir, file_name, desc=desc)
 
     # def get_downloader(self, output_dir):
     #     file_name = f"{self.episode.provider.anime.name}_EP{self.episode.number}.mp4"

@@ -51,7 +51,7 @@ def main(
 
         results.append(
             [
-                f"{anime_res.name.lower().replace(anime,'[bold #cfeffc]'+anime+'[/]')} [bold yellow]{anime_res.episode_count}EPS[/]"
+                f"{anime_res.name.lower().replace(anime,'[bold #fcfacf]'+anime+'[/]')} [bold yellow]{anime_res.episode_count}EPS[/]"
                 for anime_res in search_result
             ]
         )

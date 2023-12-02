@@ -3,7 +3,7 @@ import subprocess
 
 filter_function = lambda x: "mega.nz" in x
 priority = 4
-def download(server_link, output_dir, file_name,return_url=False):
+def download(server_link, output_dir, file_name,return_url=False,desc=None):
     # megatools is required, check if it is installed, dont display output
     if return_url:
         return server_link
