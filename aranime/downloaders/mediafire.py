@@ -28,4 +28,4 @@ def download(server_link, output_dir, file_name, desc=None,return_url=False):
 if __name__ == "__main__":
     server_link = "https://www.mediafire.com/file/ckkyboi75i5d5ku/%5BWitanime.com%5D+ENS+EP+01+FHD.mp4/file"
     output_dir = Path(".")
-    die(get_download_url(server_link, output_dir ,"test.mp4"))
+    die(download(server_link, output_dir ,"test.mp4"))

@@ -189,9 +189,11 @@ async def download_async(
         unit_scale=True,
         unit_divisor=1024,
     )
-
-    head_response = await session.head(url)
-
+    try:
+        head_response = await session.head(url)
+    except httpx.ConnectTimeout:
+        console.print(f" [bold red]Connection Timeout[/]")
+        return False
     content_length = int(head_response.headers.get("Content-Length", 0))
     # content_length is under 10mb
     if content_length < 10 * 1024 * 1024:
