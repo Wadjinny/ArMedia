@@ -12,7 +12,7 @@ from aranime.anime_interface import Anime
 from rich.table import Table
 from rich.prompt import Prompt
 from pathlib import Path
-from .utils import zip_extend, die
+from .utils import zip_extend, die, filter_list
 from time import sleep
 from typing_extensions import Annotated
 import re
@@ -27,7 +27,9 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 def main(
     anime: Annotated[str, typer.Option(prompt=True)],
     path=typer.Option(None, envvar="ARANIME_PATH"),
+    r:bool=typer.Option(False, "--range", "-r", help="Choose the episode range"),
 ):
+    # die(anime=anime, path=path, r=r)
     columns = ["id"]
     results = []
     animes = []
@@ -77,6 +79,8 @@ def main(
 
     while True:
         anime_indecies = Prompt.ask("\n[bold]Choose the anime number[/]")
+        anime_indecies = anime_indecies.strip()
+        anime_indecies = re.sub(r"\s+", " ", anime_indecies)
         try:
             anime_indecies = [int(i) for i in anime_indecies.split(" ")]
         except ValueError:
@@ -126,8 +130,16 @@ def main(
         for provider_cls, anime, index in zip(search_providers, animes, anime_indecies)
         if index != 0
     ]
-    console.clear()
     provider_controller = ProviderController(*providers)
+    if r:
+        filter_exp = Prompt.ask(
+            "\n[bold]Choose the episode range (e.g 1,3-6,8,-5)[/]"
+        )
+        episode_indecies = filter_list(range(provider_controller.episodes_len),filter_exp)
+        provider_controller.filter_episodes = episode_indecies
+        # die(episode_indecies=episode_indecies)
+    
+    console.clear()
 
     dir_name = min([p.anime.name for p in providers], key=len)
 
@@ -144,6 +156,8 @@ def main(
     console.print("[bold yellow]Output dir:[/] ", f"'{output_dir.absolute()}'")
 
     for i, episode in enumerate(provider_controller.episodes):
+        # if r and i not in episode_indecies:
+        #     continue
         for i, server in enumerate(episode.servers):
             with console.status(
                 f"Trying {server} :{i+1}/{len(episode.servers)}: {server.episode.provider.__class__.__name__}",

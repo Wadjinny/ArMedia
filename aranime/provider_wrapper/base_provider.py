@@ -66,6 +66,7 @@ class ProviderController:
             with console.status(f"requesting episodes from {provider.__class__.__name__}"):
                 provider.request_episodes()
         self.episodes_len = max([len(provider.episodes) for provider in self.providers])
+        self.filter_episodes = None
         # if not all(i == episodes_len[0] for i in episodes_len):
         #     raise ValueError(f"all providers must have same number of episodes: {episodes_len}, {[p.anime.link for p in self.providers]}")
 
@@ -73,12 +74,12 @@ class ProviderController:
     def episodes(self):
         if self.episodes_len is None:
             self.episodes_len = len(self.providers[0].episodes)
-        # for i in range(self.episodes_len):
-        #     episodes_for_each_provider = []
-            # for provider in self.providers:
-            #     episodes_for_each_provider.append(provider.episodes[i])
+            
         episodes_X_provider = zip_extend(*[provider.episodes for provider in self.providers])
         for i,episodes_for_each_provider in enumerate(episodes_X_provider):
+            if self.filter_episodes is not None:
+                if i not in self.filter_episodes:
+                    continue
             yield EpisodeController(
                 self, episodes=episodes_for_each_provider, number=f"{i+1}"
             )

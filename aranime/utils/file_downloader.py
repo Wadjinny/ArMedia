@@ -98,15 +98,16 @@ class MultiConnectionDownloader:
 
             except httpx.HTTPError as e:
                 locks = ()
-
                 if progress_bar is not None:
                     locks += (progress_bar.get_lock(),)
                 if self.progress_bar is not None:
                     locks += (self.progress_bar.get_lock(),)
-
                 # TODO: Warn user about the error.
             except sniffio.AsyncLibraryNotFoundError:
                 console.print(f" [bold red]Stoping[/] the download")
+            except KeyboardInterrupt:
+                console.print(f" [bold red]Stoping[/] the download")
+                break
                 
 
         if future is not None:
@@ -210,12 +211,13 @@ async def download_async(
             raise Exception("No filename found: Downloader")
 
     # Set the file path
+    temp_file_path = Path(output_dir) / f"{file_name}.temp"
     file_path = Path(output_dir) / file_name
 
     progress_bar.total = content_length
     progress_bar.set_description(desc)
 
-    with open(file_path, "wb") as io:
+    with open(temp_file_path, "wb") as io:
         downloader = MultiConnectionDownloader(
             session,
             "GET",
@@ -227,7 +229,8 @@ async def download_async(
             io, content_length, connections=CONNECTIONS
         )
     await session.aclose()
-    return True
+    temp_file_path.rename(file_path)
+    return downloaded_positions
 
 
 def download_file(url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32):
