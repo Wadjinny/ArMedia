@@ -37,7 +37,9 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
     else:
         return False
     response = session.head(download_url)
-    download_url = response.headers["Location"]
+    download_url = response.headers.get("Location")
+    if not download_url:
+        return False
     if return_url:
         return download_url
     return download_file(download_url, output_dir, file_name, desc=desc, CONNECTIONS=1,session=session)
