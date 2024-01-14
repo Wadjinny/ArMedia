@@ -20,7 +20,7 @@ def get_search_results_link(search_term: str) -> list[dict[str, str]]:
         name = anime.select_one(".anime-title.text-center a h2").text
         link = anime.select_one(".anime-title.text-center a")["href"]
         result_animes.append({"name": name, "link": base_url + link})
-    return result_animes
+    return result_animes[::-1]
 
 
 def get_episodes_list(anime_link) -> list[str]:
