@@ -47,7 +47,9 @@ class Provider:
     
     @classmethod
     def search_anime(cls, search_term: str)->list["Anime"]:
-        return cls._search_anime(search_term)
+        animes: list["Anime"] = cls._search_anime(search_term)
+        animes = [anime for anime in animes if anime.episode_count!=0]
+        return animes
         
     @property
     def episodes(self)->list["Episode"]:
