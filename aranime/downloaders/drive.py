@@ -7,7 +7,7 @@ from aranime.utils import die
 
 
 filter_function = lambda x: "drive.google.com" in x
-priority = 13
+priority = -1
 
 headers = {
     "AUTH_26fp55mq9v5i1ab34k205tqijo4ca64c": "03862451855875902521Z|1700877675000|ps1rgn3alt74f8mufgket0rvp6dhfa98",
@@ -47,7 +47,7 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
 
 if __name__ == "__main__":
     server_link = (
-        "https://drive.google.com/file/d/1EzbVC-6O5XhTELRYsVrC4X5D-ivJxKDC/preview"
+        "https://drive.usercontent.google.com/download?id=1B8aF0FLYOct3aOVhI_jdi8uoLz4CyFPc&export=download&authuser=0"
     )
     output_dir = Path(".")
     file_name = "test.mp4"

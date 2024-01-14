@@ -8,7 +8,7 @@ import m3u8_To_MP4
 
 
 filter_function = lambda x: "anime4low.sb" in x
-priority = 6
+priority = 0
 
 
 

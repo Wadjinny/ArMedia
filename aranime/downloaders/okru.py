@@ -7,7 +7,7 @@ from aranime.utils.file_downloader import download_file
 # %%
 
 filter_function = lambda x: "ok.ru" in x
-priority = 0
+priority = 5
 
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
     session = requests.Session()

@@ -5,7 +5,7 @@ from aranime.utils.file_downloader import download_file
 
 
 filter_function = lambda x: ("soraplay.xyz/embed" in x) and ("mirror" not in x)
-priority = 10
+priority = 9
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
     session = requests.Session()
     session.headers.update({"Referer": "https://witanime.pics/"})

@@ -5,7 +5,7 @@ from aranime.utils.file_downloader import download_file
 from aranime.utils import die
 
 filter_function = lambda x: "mediafire.com" in x
-priority = 4
+priority = 1
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
     def extractDownloadLink(contents):
         for line in contents.splitlines():

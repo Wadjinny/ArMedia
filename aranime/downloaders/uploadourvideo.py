@@ -4,7 +4,7 @@ from aranime.utils.file_downloader import download_file
 
 
 filter_function = lambda x: "uploadourvideo.com" in x
-priority = 10
+priority = 8
 
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
     session = requests.Session()
