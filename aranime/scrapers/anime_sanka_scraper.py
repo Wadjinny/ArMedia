@@ -183,6 +183,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
             print(option_lines)
             print(response)
             raise e
+    # die(episodes_list=episodes_list)
     return episodes_list[::-1]
 
 

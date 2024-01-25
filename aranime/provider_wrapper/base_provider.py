@@ -33,6 +33,7 @@ class Provider:
 
 
     def request_episodes(self)->None:
+        # die(link=self.anime.link)
         if self.anime.link is None:
             raise ValueError("anime url is None")
         self._episodes = self._request_episodes()
@@ -77,7 +78,8 @@ class ProviderController:
         if self.episodes_len is None:
             self.episodes_len = len(self.providers[0].episodes)
             
-        episodes_X_provider = zip_extend(*[provider.episodes for provider in self.providers])
+        episodes_X_provider = list(zip_extend(*[provider.episodes for provider in self.providers],no_none=True))
+        # die(episodes_X_provider=episodes_X_provider)
         for i,episodes_for_each_provider in enumerate(episodes_X_provider):
             if self.filter_episodes is not None:
                 if i not in self.filter_episodes:

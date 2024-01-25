@@ -5,3 +5,4 @@
 env
 **/*.mp4
 **/*.temp
+.venv

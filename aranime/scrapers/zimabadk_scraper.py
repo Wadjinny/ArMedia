@@ -50,14 +50,13 @@ def get_all_episodes_server_link(episode_link):
     soup = BeautifulSoup(response, "html.parser")
     server_links = soup.select("servers-links .server")
     server_links = [link["data-code"] for link in server_links]
-
     download_link = soup.select("download--servers a")
     download_link = [link["href"] for link in download_link]
     for i, link in enumerate(server_links):
         if "megamax.me/iframe" in link:
             link = link.strip()
             response = requests.request("GET", link)
-            # die(response=response.text, link=link, episode_link=episode_link)
+            
             version = re.search(
                 r"version&quot;:&quot;(.+?)&quot;", response.text
             )
@@ -67,20 +66,24 @@ def get_all_episodes_server_link(episode_link):
                 continue
                 
             headers = {
-                "cookie": "XSRF-TOKEN=eyJpdiI6IjMrODBCRXd6SXVzbzY5RXRsUWMzbVE9PSIsInZhbHVlIjoiYmRBRnJwMmFOc01JSDlVU3JhNHR1OFFtNHpzdDNxV2xkRmdGNVdqOVU5N2Q3TG91T0ROaUk4KzNWaDZXSWpJeFVIdE0zRG9NMkx2NnFZajVjYXBObFFBSnNNb1k4cUg0cXU4aGJqYkJpTWk3WjJKZWR0V21BZm5NTm9jU1lFdzYiLCJtYWMiOiI1OGJkYWU0ODQ4NWQwY2U5MjdlODE2YTkyMWU1MjU4YzVjZDg3NjI1M2VlYWM2MTljOTY2YzlmZGJiMjY5M2RiIiwidGFnIjoiIn0%253D; megamax_session=eyJpdiI6IlhJc3NzbTNIRFhIR3JqbDI0U2dPMVE9PSIsInZhbHVlIjoidEtpTkVGMXhReXRVSVZ4KzRmN091cEpIeVdSUmY3SXFwaUtoV2w0bmwwUWtmMm9ibzZwQnFUTXNOYUN1R0E4SUVIRnZmZStpK0QyL2tLdXhBaHpLaUNBZkN0SEpYSHFHVkNPYUoraStPK2s1YVJxT2pNa1BqUHR0bUFzSTdjeVoiLCJtYWMiOiJkM2YyYmNhYjUxN2I0Y2Y0YjhmNTI5NjNjODNmMjRjMTcwMDU5ZTlmMGUzZGFkMTc5NmQzYjU4YWJlNDEyMTQ3IiwidGFnIjoiIn0%253D",
+                "x-xsrf-token":"eyJpdiI6IjRJNU4xeS91N1ZndU5KNWZZR2pLOGc9PSIsInZhbHVlIjoiWGJ5dStLbTIwTVBrWHBtRTMvaU1vb3V5OEdkd2R0WEpuZ3BEQjFPZG0xU0JQL3Y1N05abU5rT1I2ZFlSVkN3c055UXh5ZzNDZEk2a051KzlObU9Eb29ySUxmQjgzY0FhSHFmN29QRWFzVDVUdHpqRzF3RU1NaTExUlVBcUpPaC8iLCJtYWMiOiJhYjU3MzZhZmJlOGM5MDhmNWU1YmIwZTQ4ZjIxNWIwMWEyMjdhYzFkY2RmZDhiMWVmMzIzODI1ODk2ZDk3ZWQ3IiwidGFnIjoiIn0=",
+                "cookie": "XSRF-TOKEN=eyJpdiI6IjRJNU4xeS91N1ZndU5KNWZZR2pLOGc9PSIsInZhbHVlIjoiWGJ5dStLbTIwTVBrWHBtRTMvaU1vb3V5OEdkd2R0WEpuZ3BEQjFPZG0xU0JQL3Y1N05abU5rT1I2ZFlSVkN3c055UXh5ZzNDZEk2a051KzlObU9Eb29ySUxmQjgzY0FhSHFmN29QRWFzVDVUdHpqRzF3RU1NaTExUlVBcUpPaC8iLCJtYWMiOiJhYjU3MzZhZmJlOGM5MDhmNWU1YmIwZTQ4ZjIxNWIwMWEyMjdhYzFkY2RmZDhiMWVmMzIzODI1ODk2ZDk3ZWQ3IiwidGFnIjoiIn0%3D; megamax_session=eyJpdiI6IlJzMGpMREMrMWlUaGlQRGxkeUQrOEE9PSIsInZhbHVlIjoiV2Mxc1B2SFFCNGRmNFU5ZTA0MXZwM3JWZnFRdGc5TzY1dUwyVCs1S0MreXJBYkpNMkczNWNiOVMvYWdoVEJ3MVFQcGFWOE9QOHJ3L1c4R0dydHR4aTcvSmZmYkgyRThsbXJQQ1pNTDdEK1RHU0s2TWhtRzZSa1ZNZGpJSDRWWDUiLCJtYWMiOiJiZjZhNTRiZmMwNGYzZjMxMjkzMmYyOGIxYjU1MzA5NTczN2NlZTNhMzg3MDJlNjUzZGI5ZGYzZDE4ZDU0YTViIiwidGFnIjoiIn0%3D",
                 "x-inertia": "true",
-                "x-inertia-partial-component": "web/files/mirror/video",
+                "x-inertia-partial-component": "files/mirror/video",
                 "x-inertia-partial-data": "streams",
                 "x-inertia-version": version,
             }
             response = requests.request("GET", link, headers=headers)
             path = "@.props.streams.data[].mirrors[].link"
             megamax_servers = jmespath.search(path, response.json())
-
-            for i, s in enumerate(megamax_servers):
-                if s.startswith("//"):
-                    megamax_servers[i] = "https:" + s
+            if megamax_servers is None:
+                print("In Zimabadk_scraper.py: megamax servers if failing (Maybe xsrf token is expired)",f'{megamax_servers=}')
+                continue
             server_links.extend(megamax_servers)
+            
+    for i, s in enumerate(server_links):
+        if s.startswith("//"):
+            server_links[i] = "https:" + s
 
     return server_links + download_link
 

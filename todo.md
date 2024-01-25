@@ -1,5 +1,6 @@
-- [x] Sort on all servers merged
-- [x] Display the path with the final server link
-- [x] Env variable "ARANIME_PATH" to set the download path
-- [x] take episode number from provider 
-
+- [] when having animes with different eps len, ignore the none for the rest of the longer ones
+- [ ] Wrap meganz in in cli interface
+- [ ] write test for each site, each server scrapper
+- [ ] when file file isinterpted while downloding, skipit
+- [] use config file for server priority
+-[] diffent ep count panel: display ep count
