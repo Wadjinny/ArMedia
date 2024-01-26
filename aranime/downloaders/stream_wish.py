@@ -4,6 +4,8 @@ import requests
 from aranime.utils.file_downloader import download_file
 from aranime.utils import die
 import m3u8_To_MP4
+import logging
+logging.getLogger("m3u8downloader").setLevel(logging.WARNING)
 
 
 

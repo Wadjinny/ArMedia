@@ -1,6 +1,6 @@
-- [] when having animes with different eps len, ignore the none for the rest of the longer ones
+- [x] when having animes with different eps len, ignore the none for the rest of the longer ones
+- [x] use config file for server priority
 - [ ] Wrap meganz in in cli interface
 - [ ] write test for each site, each server scrapper
-- [ ] when file file isinterpted while downloding, skipit
-- [] use config file for server priority
--[] diffent ep count panel: display ep count
+- [ ] when file file is interupted while downloding, skipit
+- [ ] diffent ep count panel: display ep count

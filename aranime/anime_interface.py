@@ -109,8 +109,3 @@ class Server:
 
         return self.downloader.download(self.link, output_dir, file_name, desc=desc)
 
-    # def get_downloader(self, output_dir):
-    #     file_name = f"{self.episode.provider.anime.name}_EP{self.episode.number}.mp4"
-    #     download_link = self.downloader.get_download_url(self.link)
-    #     dowloader = DownloadFile(download_link, output_dir, file_name)
-    #     return dowloader

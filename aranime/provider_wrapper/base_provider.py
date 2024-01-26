@@ -7,10 +7,14 @@ if TYPE_CHECKING:
 console = Console()
 
 class EpisodeController:
-    def __init__(self, anime: "Anime", episodes: list["Episode"], number: str) -> None:
+    def __init__(self, anime: "Anime", episodes: list["Episode"], number: str,order_list=None) -> None:
         self.anime = anime
         self.servers:list["Server"] = join_list_of_list(episode.find_servers for episode in episodes)
-        self.servers = sorted(self.servers, key=lambda s: s.priority, reverse=True)
+        if order_list is None:
+            self.servers = sorted(self.servers, key=lambda s: s.priority, reverse=True)
+        else:
+            key = lambda s: order_list.index(str(s)) if str(s) in order_list else 999 - s.priority
+            self.servers = sorted(self.servers, key=key)
         self.is_dowloaded = False
         self.number = number
 
@@ -63,13 +67,14 @@ class Provider:
 
 
 class ProviderController:
-    def __init__(self, *providers:Provider) -> None:
+    def __init__(self, *providers:Provider,servers_order_list=None) -> None:
         self.providers = providers
         for provider in self.providers:
             with console.status(f"requesting episodes from {provider.__class__.__name__}"):
                 provider.request_episodes()
         self.episodes_len = max([len(provider.episodes) for provider in self.providers])
         self.filter_episodes = None
+        self.servers_order_list = servers_order_list
         # if not all(i == episodes_len[0] for i in episodes_len):
         #     raise ValueError(f"all providers must have same number of episodes: {episodes_len}, {[p.anime.link for p in self.providers]}")
 
@@ -85,5 +90,5 @@ class ProviderController:
                 if i not in self.filter_episodes:
                     continue
             yield EpisodeController(
-                self, episodes=episodes_for_each_provider, number=f"{i+1}"
+                self, episodes=episodes_for_each_provider, number=f"{i+1}",order_list=self.servers_order_list
             )
