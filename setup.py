@@ -1,7 +1,14 @@
 from setuptools import setup, find_packages
-
+from pathlib import Path
 with open("requirements.txt") as f:
     requirements = f.readlines()
+with open("priority.txt") as f:
+    priority = f.readlines()
+
+app_path = Path.home() / ".aranime"
+app_path.mkdir(exist_ok=True)
+with open(app_path / "priority.txt", "w") as f:
+    f.writelines(priority)
 
 long_description = "Download anime with arabic sub from public websites"
 
