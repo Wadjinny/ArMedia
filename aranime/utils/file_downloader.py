@@ -178,7 +178,6 @@ class MultiConnectionDownloader:
 async def download_async(
     url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32
 ):
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
     session = httpx.AsyncClient(
         timeout=30.0,
         follow_redirects=True,

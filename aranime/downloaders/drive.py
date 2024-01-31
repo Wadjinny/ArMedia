@@ -3,17 +3,18 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 from aranime.utils.file_downloader import download_file
-from aranime.utils import die
-
+from aranime.utils import die,debug
+from urllib.parse import urlencode
 
 filter_function = lambda x: "drive.google.com" in x
-priority = -1
+priority = 10
 
 headers = {
-    "AUTH_26fp55mq9v5i1ab34k205tqijo4ca64c": "03862451855875902521Z|1700877675000|ps1rgn3alt74f8mufgket0rvp6dhfa98",
-    "COMPASS": "documents=CmIACWuJV2-ZChMhtx2-iD7f3KgeGOh7QSKVgjBtbUVCXSm7Z-K0SGmbmxGjGDGx-tzVeNFxR2l6_85-a2KZjjJXwOpELK-q1FVqCVkXClK8iAeuHUvFBxLgXLnZQO9xnDvOdBDx_vSmBhpkAAlriVc9_tbGja0SOveLBupSqpAC_3MXi_oKvLaH6vMxSrr8qqNkMv97MOsLLhmq3Sc-nPcQtP0GdpJngU4Dn5Gqpr2qw7i3A9q1zplyNuBG6fDjwXoJWXqCVMRR_nw93-hVpQ==",
-    "GFE_RTT": "257",
-    "NID": "511=BRHhRFz3aTBU_d9GiZWI0gFtidXfP27uGkufeGyUvdNiPWbJvWb8ccJME-9Qp9Ec9too8hl-cqwsNbIV--d3MlvzshkBt0qFII_SdOmvhVWdY-lutV15k5z6ATR6bRyLyp16eriKWIGNurKo3q2v8wl6niGjflVVK0CdJQQ2Fxs",
+    "cookie": (
+        "__Secure-3PSID=fgh4UlbqWUxTLODfiRQnb1MdrvGA4PsON3zYV9uYsBeAueUMkXFmaROnLDWOgwbRDl5YiA.;"
+        "__Secure-3PSIDTS=sidts-CjIBPVxjSrRdxPSH6EIHOeca02Vqi5zD9R7LcJqa8Zn68WuaNseIcUlPPNldhF8p9WE5rBAA;"
+        "__Secure-3PSIDCC=ABTWhQGRUToVHgvbg74TC4d4ooMfZOgaHgyw-h4tnzk0KtSej80zE258IjzgAERZ4hYhfpFAnoo"
+    ),
 }
 
 
@@ -25,30 +26,35 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
             return re.findall(r"/d/(.*?)/", link)[0]
 
     id = get_id(server_link)
-    url = f"https://drive.google.com/uc?id={id}&export=download"
+    url = f"https://drive.usercontent.google.com/download?id={id}&export=download"
     session = requests.Session()
     session.headers.update(headers)
     response = session.get(url)
     response = response.text
     soup = BeautifulSoup(response, "html.parser")
-    download_url = soup.select_one("form", id="download-form")
-    if download_url:
-        download_url = download_url["action"]
+    download_form = soup.select_one("form", id="download-form")
+    if download_form:
+        download_base = download_form["action"]
+        download_params = download_form.select("input")
+        # die(download_params)
+        download_params = {
+            x["name"]: x["value"] for x in download_params if x.get("name")
+        }
+        if download_params.get("at") is None:
+            debug("[at] param not found in Drive url")
+            return False
+        download_url = download_base + "?" + urlencode(download_params)
     else:
-        return False
-    response = session.head(download_url)
-    download_url = response.headers.get("Location")
-    if not download_url:
         return False
     if return_url:
         return download_url
-    return download_file(download_url, output_dir, file_name, desc=desc, CONNECTIONS=1,session=session)
+    return download_file(
+        download_url, output_dir, file_name, desc=desc, CONNECTIONS=1, session=session
+    )
 
 
 if __name__ == "__main__":
-    server_link = (
-        "https://drive.usercontent.google.com/download?id=1B8aF0FLYOct3aOVhI_jdi8uoLz4CyFPc&export=download&authuser=0"
-    )
+    server_link = "https://drive.usercontent.google.com/download?id=1B8aF0FLYOct3aOVhI_jdi8uoLz4CyFPc&export=download&authuser=0"
     output_dir = Path(".")
     file_name = "test.mp4"
-    die(download_file(server_link, output_dir, file_name))
+    die(download(server_link, output_dir, file_name))
