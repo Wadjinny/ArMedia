@@ -9,12 +9,25 @@ from urllib.parse import urlencode
 filter_function = lambda x: "drive.google.com" in x
 priority = 10
 
-headers = {
-    "cookie": (
-        "__Secure-3PSID=fgh4UlbqWUxTLODfiRQnb1MdrvGA4PsON3zYV9uYsBeAueUMkXFmaROnLDWOgwbRDl5YiA.;"
-        "__Secure-3PSIDTS=sidts-CjIBPVxjSrRdxPSH6EIHOeca02Vqi5zD9R7LcJqa8Zn68WuaNseIcUlPPNldhF8p9WE5rBAA;"
-        "__Secure-3PSIDCC=ABTWhQGRUToVHgvbg74TC4d4ooMfZOgaHgyw-h4tnzk0KtSej80zE258IjzgAERZ4hYhfpFAnoo"
-    ),
+headers={
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    "sec-ch-ua": "\"Not A(Brand\";v=\"99\", \"Google Chrome\";v=\"121\", \"Chromium\";v=\"121\"",
+    "sec-ch-ua-arch": "\"x86\"",
+    "sec-ch-ua-bitness": "\"64\"",
+    "sec-ch-ua-full-version": "\"121.0.6167.85\"",
+    "sec-ch-ua-full-version-list": "\"Not A(Brand\";v=\"99.0.0.0\", \"Google Chrome\";v=\"121.0.6167.85\", \"Chromium\";v=\"121.0.6167.85\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-model": "\"\"",
+    "sec-ch-ua-platform": "\"Linux\"",
+    "sec-ch-ua-platform-version": "\"6.5.0\"",
+    "sec-ch-ua-wow64": "?0",
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "none",
+    "sec-fetch-user": "?1",
+    "upgrade-insecure-requests": "1",
 }
 
 
@@ -40,9 +53,6 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
         download_params = {
             x["name"]: x["value"] for x in download_params if x.get("name")
         }
-        if download_params.get("at") is None:
-            debug("[at] param not found in Drive url")
-            return False
         download_url = download_base + "?" + urlencode(download_params)
     else:
         return False
