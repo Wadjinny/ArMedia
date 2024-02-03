@@ -1,4 +1,6 @@
 #ok.ru
+#www.ok.ru
+#d0o0d.com
 #mega.nz
 #drive.google.com
 #dropbox.com

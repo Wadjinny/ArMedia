@@ -5,18 +5,18 @@ with open("requirements.txt") as f:
 with open("priority.txt") as f:
     priority = f.readlines()
 
-app_path = Path.home() / ".aranime"
+app_path = Path.home() / ".armedia"
 app_path.mkdir(exist_ok=True)
 with open(app_path / "priority.txt", "w") as f:
     f.writelines(priority)
 
-long_description = "Download anime with arabic sub from public websites"
+long_description = "Download Anime/ Movies/ Series with arabic sub from public websites"
 
 setup(
-    name="aranime",
+    name="armedia",
     version="1.0.0",
     author="ilyas wadjinny",
-    description="Download anime with arabic sub ",
+    description="Download Anime/ Movies/ Series with arabic sub ",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
@@ -24,7 +24,7 @@ setup(
     include_package_data=True,
     entry_points={
         "console_scripts": [
-            "aranime = aranime.__main__:run",
+            "armedia = armedia.__main__:run",
         ]
     },
     install_requires=requirements,
