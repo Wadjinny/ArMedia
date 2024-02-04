@@ -14,6 +14,7 @@ from .downloaders import (
     ds2play,
     doodstream,
     streamtape,
+    downet,
 )
 import re
 from tqdm import tqdm
@@ -97,6 +98,7 @@ class Server:
             ds2play,
             doodstream,
             streamtape,
+            downet,
         ]
         for downloader in available_downloaders:
             if downloader.filter_function(link):

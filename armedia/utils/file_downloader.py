@@ -183,7 +183,8 @@ async def download_async(
     headers = None if session is None else session.headers
     session = httpx.AsyncClient(
         timeout=30.0,
-        follow_redirects=True
+        follow_redirects=True,
+        verify=False,
     )
     session.headers.update(headers)
     progress_bar = tqdm(

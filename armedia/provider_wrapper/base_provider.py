@@ -6,6 +6,8 @@ if TYPE_CHECKING:
     from ..media_interface import Media, Episode, Server
 console = Console()
 
+# def has_str(list_str,str):
+
 
 class EpisodeController:
     def __init__(

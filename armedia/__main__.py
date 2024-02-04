@@ -13,9 +13,9 @@ from armedia.provider_wrapper import (
     AnimeSanka,
     ZimaBdk,
     AnimeIat,
-    ProviderController,
-    EpisodeController,
     TopCinema,
+    Akwam,
+    ProviderController,
     Provider,
 )
 from armedia.cli_cycle import search_part, media_decision,choose_provider
@@ -38,7 +38,7 @@ def main(
             "--priority", "-p", help="Choose the priority of servers", exists=True
         ),
     ] = None,
-    providers_choice :Annotated[Optional[str],typer.Option('--provider-choice','-c',help="Choose which source to search: a[AnimeSanka]w[Witanime]i[Animeiat]z[Zimabadk]t[TopCinema]")] = "anime"
+    providers_choice :Annotated[Optional[str],typer.Option('--provider-choice','-c',help="Choose which source to search: a[AnimeSanka]w[Witanime]i[Animeiat]z[Zimabadk]t[TopCinema]k[Akwam]")] = "anime"
 ):
     search_providers = [
         AnimeSanka,
@@ -46,6 +46,7 @@ def main(
         AnimeIat,
         ZimaBdk,
         TopCinema,
+        Akwam,
     ]
     
     search_providers = choose_provider(providers_choice,search_providers)
