@@ -64,7 +64,7 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
     if return_url:
         return full_url
     session.headers.update(headers)
-    return download_file(full_url, output_dir=output_dir, file_name=file_name, desc=desc,session=session, CONNECTIONS=8)
+    return download_file(full_url, output_dir=output_dir, file_name=file_name, desc=desc,session=session)
 
 
 if __name__ == "__main__":
