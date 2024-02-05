@@ -64,8 +64,10 @@ def get_search_results_link(search_term: str) -> list[dict[str, str]]:
     return formated_medias[::-1]
 
 
-def get_episodes_list(anime_link) -> list[str]:
-    response = requests.request("GET", anime_link, timeout=100)
+def get_episodes_list(media_link) -> list[str]:
+    if "/movie/" in media_link:
+        return [{"link": media_link, "number": "1"}]
+    response = requests.request("GET", media_link, timeout=100)
     response = response.content.decode("utf-8")
     soup = BeautifulSoup(response, "html.parser")
     episodes = soup.select("#series-episodes > div.widget-body > div > div")
@@ -82,7 +84,15 @@ def get_all_episodes_server_link(episode_link):
     headers = {
         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
         "sec-ch-ua": '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
-        "cookie": "akwamVerification3=eyJpdiI6Ik11QU1RV2VNOGVnS0Jlc1FRV2NtbXc9PSIsInZhbHVlIjoibFR1NlpNSDROcjZta3c1Q2Q5V1VmQT09IiwibWFjIjoiODE2MzYwODUwZDcyMjRlYmY3ZDc4NWFhNTgzYzkyMjI1M2M4MTE3YjFjNmQ3MzM2OTMyOTA5ZDNmNmJmOThiNSJ9; XSRF-TOKEN=eyJpdiI6InpLMmU5ZVwvQ1ZjMlA5elBzZ1V4THNBPT0iLCJ2YWx1ZSI6IkpcL08reXlJaVBYMThnT3ZPKzY0alBnMmRKMUZjM1U1QU5iT1dTQkkwM0ZxYStEelRESFhHQVRib0xRRkhQXC8ySiIsIm1hYyI6ImE2ZDg4NjcxMjI5ZmNlMWUwYzI3NzI1MWQ4NmQ4ZjM5YWFmZWE2YjNkZmVhZGFjNmU2ZTkzMDVhNGZiYTUxZTQifQ%3D%3D; akwam_session=eyJpdiI6IjA0bmZzMzd4bVhySHQxQm5BMU5vMEE9PSIsInZhbHVlIjoiTzQybW93ME5pRkhyMVZDTnFzNmlFbFR1V0VrVEFQbldhZHBGRytzQnV2NXBpdFwvYTNVYll5QndLSmRRQ1FkN1kiLCJtYWMiOiI3NWZiYWNiNGM4MGU4ZjZiNDZmODZmMWZmNzA3NDM3ODNkNGYxZGYxMTA3NzNmMWE3YjE5ZjcxNjM5MWIyNDhiIn0%3D; qqvxl11JK6q52al0etnCb8JHnJ5mYjU2CjPmPpfP=eyJpdiI6IjN1aXZCVlRqaTdkcG5KS0xhYjQ1VXc9PSIsInZhbHVlIjoiRWlGRk5ETk0xclJLd0J4Z29YTjFUK0dwZFRYaFY1T0thdWh1QWlaQm9HdHI4QXRLbWxPKzZYZksxNkZLU2JkckZ6WVJCN0I5RjNSSktYRmFxbzRkZjhweXNwY09aUTlsSVViRklNcUFjaWtmeGJ2bTd2KzRsa1pwOHdBQnFKVkZXbUtHU0xZWnhuYUFJMHhsNEY0QnJsS1MzYnE1TEdoRExqb1RqallQbGVXbVpuY1hWVHVwMElIQnk5M29qSVFmaGN4eTVQT0tSR3ZMK25tWlF6MG9SeGIxZVMwVjR5RUNDXC9rbXYyU2tWc1wvQ0wzK25FVU85K21jR0RpZ2Y1MWh6dGh3ZGlXS2dtOGVWblc0UlFNalA1U1oyNTNrdkNrN2tZVGdPK3E3a1wvZXVNeWppeTNheGEyczlMYTUyZGNMZGg1QU5NNGFzbFI1YjFkOHFONlV2QWlqRmg3U0FoSko5NXRwdzN2UU9kbWdkNHh2NXoyUGNBSmZmTkxPRVwvTXJjb3JZMmVcL0xiUjlpbjRcL0FNaURcL0VPV2lHN3FkTGJQaDJUYmNZK0hjelwvRzFKQnhRV3pRT3hsUmkwY3RGR3dyK2NaIiwibWFjIjoiOTcyZGFmYThlMmU2OTc5MGYzNTE2ZjQyZmUwZjVkOWUyMjI5MjY4OWFlOTNmOWViZGJhMjA3ZjBjNzhjYzNmOSJ9",
+        "cookie": """
+        akwamVerification3 = eyJpdiI6Ik11QU1RV2VNOGVnS0Jlc1FRV2NtbXc9PSIsInZhbHVlIjoibFR1NlpNSDROcjZta3c1Q2Q5V1VmQT09IiwibWFjIjoiODE2MzYwODUwZDcyMjRlYmY3ZDc4NWFhNTgzYzkyMjI1M2M4MTE3YjFjNmQ3MzM2OTMyOTA5ZDNmNmJmOThiNSJ9;
+        XSRF-TOKEN = eyJpdiI6InpLMmU5ZVwvQ1ZjMlA5elBzZ1V4THNBPT0iLCJ2YWx1ZSI6IkpcL08reXlJaVBYMThnT3ZPKzY0alBnMmRKMUZjM1U1QU5iT1dTQkkwM0ZxYStEelRESFhHQVRib0xRRkhQXC8ySiIsIm1hYyI6ImE2ZDg4NjcxMjI5ZmNlMWUwYzI3NzI1MWQ4NmQ4ZjM5YWFmZWE2YjNkZmVhZGFjNmU2ZTkzMDVhNGZiYTUxZTQifQ%3D%3D;
+        akwam_session = eyJpdiI6IjA0bmZzMzd4bVhySHQxQm5BMU5vMEE9PSIsInZhbHVlIjoiTzQybW93ME5pRkhyMVZDTnFzNmlFbFR1V0VrVEFQbldhZHBGRytzQnV2NXBpdFwvYTNVYll5QndLSmRRQ1FkN1kiLCJtYWMiOiI3NWZiYWNiNGM4MGU4ZjZiNDZmODZmMWZmNzA3NDM3ODNkNGYxZGYxMTA3NzNmMWE3YjE5ZjcxNjM5MWIyNDhiIn0%3D;
+        qqvxl11JK6q52al0etnCb8JHnJ5mYjU2CjPmPpfP = eyJpdiI6IjN1aXZCVlRqaTdkcG5KS0xhYjQ1VXc9PSIsInZhbHVlIjoiRWlGRk5ETk0xclJLd0J4Z29YTjFUK0dwZFRYaFY1T0thdWh1QWlaQm9HdHI4QXRLbWxPKzZYZksxNkZLU2JkckZ6WVJCN0I5RjNSSktYRmFxbzRkZjhweXNwY09aUTlsSVViRklNcUFjaWtmeGJ2bTd2KzRsa1pwOHdBQnFKVkZXbUtHU0xZWnhuYUFJMHhsNEY0QnJsS1MzYnE1TEdoRExqb1RqallQbGVXbVpuY1hWVHVwMElIQnk5M29qSVFmaGN4eTVQT0tSR3ZMK25tWlF6MG9SeGIxZVMwVjR5RUNDXC9rbXYyU2tWc1wvQ0wzK25FVU85K21jR0RpZ2Y1MWh6dGh3ZGlXS2dtOGVWblc0UlFNalA1U1oyNTNrdkNrN2tZVGdPK3E3a1wvZXVNeWppeTNheGEyczlMYTUyZGNMZGg1QU5NNGFzbFI1YjFkOHFONlV2QWlqRmg3U0FoSko5NXRwdzN2UU9kbWdkNHh2NXoyUGNBSmZmTkxPRVwvTXJjb3JZMmVcL0xiUjlpbjRcL0FNaURcL0VPV2lHN3FkTGJQaDJUYmNZK0hjelwvRzFKQnhRV3pRT3hsUmkwY3RGR3dyK2NaIiwibWFjIjoiOTcyZGFmYThlMmU2OTc5MGYzNTE2ZjQyZmUwZjVkOWUyMjI5MjY4OWFlOTNmOWViZGJhMjA3ZjBjNzhjYzNmOSJ9""".replace(
+            "\n", ""
+        ).replace(
+            " ", ""
+        ),
     }
     session = requests.Session()
     session.headers.update(headers)
@@ -100,7 +110,14 @@ def get_all_episodes_server_link(episode_link):
     response = session.request("GET", url, timeout=100)
     response = response.text
     links = re.findall(r'"(https://.*?/download/.*?\.mp4)"', response)
-    return links
+
+    download_links = url.replace("watch", "download")
+    response = session.request("GET", download_links, timeout=100)
+    response = response.text
+
+    download_links = re.findall(r'"(https://.*?/download/.*?\.mp4)"', response)
+    download_links.extend(links)
+    return download_links
 
 
 if __name__ == "__main__":

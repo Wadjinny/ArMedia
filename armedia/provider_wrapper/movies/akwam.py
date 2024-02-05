@@ -25,7 +25,7 @@ class Akwam(Provider):
                 with console.status(
                     f"getting episode count for {cls.__name__}/{search_term}: [bold]{i+1}[/]/{len(result)}"
                 ):
-                    episodes = get_episodes_list(anime_link=anime.link)
+                    episodes = get_episodes_list(media_link=anime.link)
                     anime.episode_count = len(episodes)
 
         if len(result) == 0:

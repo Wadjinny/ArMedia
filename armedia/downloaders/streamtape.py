@@ -32,6 +32,8 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
     response = response.text
 
     tokens = re.findall(r"&(token=.+)'", response)
+    if not tokens:
+        return False
     token = tokens[-1]
     ids = re.findall(r"get_video\?(id=.+&expires=.+&ip=.+)&token", response)
     id=ids[0]

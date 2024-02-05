@@ -34,7 +34,7 @@ headers={
 def download(server_link, output_dir, file_name, desc=None, return_url=False):
     if return_url:
         return server_link
-    return download_file(server_link, output_dir, file_name, desc=desc,CONNECTIONS=1)
+    return download_file(server_link, output_dir, file_name, desc=desc,CONNECTIONS=32)
 
 if __name__ == "__main__":
     server_link = "https://s216d1.downet.net/download/1707152401/65bfc291ada5c/Rose.Wa.Layla.S01E08.1080p.WEB-DL.AKWAM.mp4"

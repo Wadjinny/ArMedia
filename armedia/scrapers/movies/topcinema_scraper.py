@@ -46,8 +46,10 @@ def get_search_results_link(search_term: str) -> list[dict[str, str]]:
     return titles_formated[::-1]
 
 
-def get_episodes_list(anime_link) -> list[str]:
-    response = requests.request("GET", anime_link, timeout=100)
+def get_episodes_list(media_link) -> list[str]:
+    if "/series/" not in media_link:
+        return [{"link": media_link, "number": "1"}]
+    response = requests.request("GET", media_link, timeout=100)
     response = response.text
     soup = BeautifulSoup(response, "html.parser")
     episodes = soup.select("section.allepcont.getMoreByScroll > .row > a")
@@ -62,7 +64,7 @@ def get_episodes_list(anime_link) -> list[str]:
 
 def get_all_episodes_server_link(episode_link):
     # todo: shave headers
-    episode_link = episode_link+"/watch/"
+    episode_link = episode_link + "/watch/"
     response = requests.request("GET", episode_link, timeout=100)
     response = response.text
     soup = BeautifulSoup(response, "html.parser")
