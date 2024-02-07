@@ -46,6 +46,7 @@ def get_search_results_link(search_term) -> list[dict[str, str]]:
 
 def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
     url = anime_link
+    session = requests.Session()
     payload = {}
     headers = {
         "authority": "www.anime-sanka.com",
@@ -71,7 +72,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
         "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
     }
 
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = session.request("GET", url, headers=headers, data=payload)
 
     html_doc = response.text
     soup = BeautifulSoup(html_doc, "html.parser")
@@ -101,7 +102,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
     prefix = "https://ar.anime-sanka.com/"
     anime_link = prefix + link
 
-    response = requests.request("GET", anime_link, headers=headers, data=payload)
+    response = session.request("GET", anime_link, headers=headers, data=payload)
     response = response.text
     search_link = link.replace("watch.animesanka.com", "prwd.animesanka.club")
 
@@ -134,7 +135,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
         "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
     }
 
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = session.request("GET", url, headers=headers, data=payload)
 
     response = response.text
     # unescape the string

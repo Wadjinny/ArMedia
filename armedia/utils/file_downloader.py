@@ -218,7 +218,6 @@ async def download_async(
 
     progress_bar.total = content_length
     progress_bar.set_description(desc)
-
     with open(temp_file_path, "wb") as io:
         downloader = MultiConnectionDownloader(
             session,
@@ -230,9 +229,13 @@ async def download_async(
         downloaded_positions = await downloader.allocate_downloads(
             io, content_length, connections=CONNECTIONS
         )
+    
+    total_bytes = sum(end - start for start, end in downloaded_positions)
     await session.aclose()
     temp_file_path.rename(file_path)
-    return downloaded_positions
+    if total_bytes != content_length:
+        console.print(f"[red]Download is incomplete, skipping...[/]")
+    return total_bytes==content_length
 
 
 def download_file(url, output_dir, file_name=None, session=None, desc=None, CONNECTIONS=32):

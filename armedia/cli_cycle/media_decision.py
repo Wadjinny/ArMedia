@@ -97,6 +97,8 @@ def choose_provider(filter_str,providers_list):
         return [p for p in providers_list if providers_map.get(p) in media_p]
     elif filter_str == "anime":
         return [p for p in providers_list if providers_map.get(p) in anime_p]
+    elif filter_str == "all":
+        return providers_list
     else:
         return [p for p in providers_list if providers_map.get(p) in filter_str]
 

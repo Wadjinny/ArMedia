@@ -9,6 +9,7 @@ import jmespath
 def get_search_results_link(search_term: str) -> list[str]:
     types = ["anime"]
     animes = []
+    session = requests.Session()
     for type in types:
         url = f"https://www.zimabadk.com/ajaxcenter/search"
         headers = {
@@ -16,7 +17,6 @@ def get_search_results_link(search_term: str) -> list[str]:
         }
         payload = {"s": search_term, "type": type}
         payload = urlencode(payload)
-        session = requests.Session()
         response = session.post(url, timeout=100, data=payload, headers=headers)
         response = response.text
         soup = BeautifulSoup(response, "html.parser")
