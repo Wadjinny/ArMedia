@@ -7,8 +7,14 @@ with open("priority.txt") as f:
 
 app_path = Path.home() / ".armedia"
 app_path.mkdir(exist_ok=True)
-with open(app_path / "priority.txt", "w") as f:
-    f.writelines(priority)
+
+app_priority = app_path / "priority.txt"
+if not app_priority.exists():
+    app_priority.write_text(priority)
+    
+config_file = app_path / "config.json"
+if not config_file.exists():
+    config_file.write_text("{}")
 
 long_description = "Download Anime/ Movies/ Series with arabic sub from public websites"
 
