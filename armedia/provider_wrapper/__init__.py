@@ -5,3 +5,4 @@ from .anime.animeiat import AnimeIat
 from .movies.topcinema import TopCinema
 from .movies.akwam import Akwam
 from .base_provider import Provider, EpisodeController, ProviderController
+from .movies.winnoise import Winnoise

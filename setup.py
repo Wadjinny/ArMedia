@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 from pathlib import Path
+import subprocess
+
+
 with open("requirements.txt") as f:
     requirements = f.readlines()
 with open("priority.txt") as f:
@@ -11,12 +14,13 @@ app_path.mkdir(exist_ok=True)
 app_priority = app_path / "priority.txt"
 if not app_priority.exists():
     app_priority.write_text(priority)
-    
+
 config_file = app_path / "config.json"
 if not config_file.exists():
     config_file.write_text("{}")
 
 long_description = "Download Anime/ Movies/ Series with arabic sub from public websites"
+subprocess.check_call(['pip', 'install', './lib/m3u8_To_MP4-0.1.12-py3-none-any.whl'])
 
 setup(
     name="armedia",

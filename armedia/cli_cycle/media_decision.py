@@ -8,6 +8,7 @@ from armedia.provider_wrapper import (
     AnimeIat,
     TopCinema,
     Akwam,
+    Winnoise,
 )
 
 def media_decision(search_providers, medias, columns, console):
@@ -87,12 +88,13 @@ def choose_provider(filter_str,providers_list):
         AnimeIat:"i",
         ZimaBdk:"z",
         TopCinema:"t",
-        Akwam:"k"
+        Akwam:"k",
+        Winnoise:"n",
         
     }
     providers_chars = "".join(providers_map.values())
     anime_p = "awiz"
-    media_p = "tk"
+    media_p = "ntk"
     if filter_str == "media":
         return [p for p in providers_list if providers_map.get(p) in media_p]
     elif filter_str == "anime":

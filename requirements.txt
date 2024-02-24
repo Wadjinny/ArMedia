@@ -4,5 +4,4 @@ gdown
 httpx
 typer[all]
 jmespath
-m3u8_To_MP4
 cloudscraper

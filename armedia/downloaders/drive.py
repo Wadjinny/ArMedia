@@ -36,7 +36,7 @@ headers = {
     "upgrade-insecure-requests": "1",
 }
 
-headers.update(config.get("drive_headers", {}))
+# headers.update(config.get("drive_headers", {}))
 
 def download(server_link, output_dir, file_name, desc=None, return_url=False):
     def get_id(link):

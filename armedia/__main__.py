@@ -15,6 +15,7 @@ from armedia.provider_wrapper import (
     AnimeIat,
     TopCinema,
     Akwam,
+    Winnoise,
     ProviderController,
     Provider,
 )
@@ -31,7 +32,7 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 def main(
     name: Annotated[str, typer.Option(prompt=True)],
     path=typer.Option(None, envvar="ARMEDIA_PATH"),
-    r: bool = typer.Option(False, "--range", "-r", help="Choose the episode range"),
+    r: Annotated[bool,typer.Option( "--range", "-r", help="Choose the episode range")] = False,
     servers_order_file: Annotated[
         Optional[Path],
         typer.Option(
@@ -47,6 +48,7 @@ def main(
         ZimaBdk,
         TopCinema,
         Akwam,
+        Winnoise,
     ]
     
     search_providers = choose_provider(providers_choice,search_providers)

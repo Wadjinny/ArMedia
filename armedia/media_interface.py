@@ -15,6 +15,7 @@ from .downloaders import (
     doodstream,
     streamtape,
     downet,
+    pollllop,
 )
 import re
 from tqdm import tqdm
@@ -22,11 +23,12 @@ from tqdm import tqdm
 
 class Media:
     def __init__(
-        self, name: str, english_name: str = None, link=None, episode_count=None
+        self, name: str, link=None, episode_count=None, meta=None
     ):
         self.name = name
         self.link = link
         self.episode_count = episode_count
+        self.meta = meta
 
     @staticmethod
     def search(media_name: StopIteration):
@@ -47,12 +49,13 @@ class Media:
 
 class Episode:
     def __init__(
-        self, provider: Provider, link: str = None, number: str = None, servers=None
+        self, provider: Provider, link: str = None, number: str = None, servers=None,meta=None
     ):
         self.link = link
         self.number = number
         self.provider = provider
         self._servers = servers
+        self.meta = meta
 
     @property
     def find_servers(self):
@@ -99,6 +102,7 @@ class Server:
             doodstream,
             streamtape,
             downet,
+            pollllop,
         ]
         for downloader in available_downloaders:
             if downloader.filter_function(link):

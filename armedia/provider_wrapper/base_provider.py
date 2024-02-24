@@ -1,4 +1,4 @@
-from ..utils import join_list_of_list, die, debug, zip_extend
+from armedia.utils import join_list_of_list, die, debug, zip_extend
 from typing import TYPE_CHECKING
 from rich.console import Console
 
@@ -6,8 +6,12 @@ if TYPE_CHECKING:
     from ..media_interface import Media, Episode, Server
 console = Console()
 
-# def has_str(list_str,str):
-
+def index_of(list_str,text):
+    # debug("######",list_str=list_str,text=text)
+    for i,e in enumerate(list_str):
+        if e in text:
+            return i
+    return -1
 
 class EpisodeController:
     def __init__(
@@ -20,9 +24,12 @@ class EpisodeController:
         if order_list is None:
             self.servers = sorted(self.servers, key=lambda s: s.priority, reverse=True)
         else:
-            key = lambda s: (
-                order_list.index(str(s)) if str(s) in order_list else 999 - s.priority
-            )
+            def key(s):
+                is_server_in_list = index_of(order_list,str(s)) 
+                if is_server_in_list == -1:
+                    return 999-s.priority
+                else:
+                    return is_server_in_list
             self.servers = sorted(self.servers, key=key)
         self.is_dowloaded = False
         self.number = number
@@ -106,3 +113,21 @@ class ProviderController:
                 number=f"{i+1}",
                 order_list=self.servers_order_list,
             )
+
+
+if __name__ == "__main__":
+    test_list = ["p.pollllop.com", "b-g-eu-20.feetcdn.com:2223"]  
+    # die(has_str(test_list,"feetcdn.com"))
+    # order_list =  ['ok.ru', 'www.ok.ru', 'feetcdn.com', 'pollllop.com']   
+    # test_list = ['s.pollllop.com', 'b-g-eu-15.feetcdn.com:2223'] 
+    # die(index_of(order_list,test_list[0]))
+    # def key(s):
+    #     is_server_in_list = index_of(order_list,str(s)) 
+    #     if is_server_in_list == -1:
+    #         return 999
+    #     else:
+    #         return is_server_in_list
+    # die(key(test_list[1]))
+    # test_list = sorted(test_list, key=key)
+    # die(sorted_list=test_list)
+    
