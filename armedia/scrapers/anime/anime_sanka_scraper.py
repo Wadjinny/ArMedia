@@ -106,7 +106,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
     response = response.text
     search_link = link.replace("watch.animesanka.com", "prwd.animesanka.club")
 
-    regex = f"""["']id["']: *["'](.*)["'],[\s\n]*["']link["']: *["']{search_link}["']"""
+    regex = fr"""["']id["']: *["'](.*)["'],[\s\n]*["']link["']: *["']{search_link}["']"""
     id = re.search(regex, response)
     if id is not None:
         id = id.group(1)
@@ -139,7 +139,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
 
     response = response.text
     # unescape the string
-    response = response.encode().decode("unicode-escape").replace("\/", "/")
+    response = response.encode().decode("unicode-escape").replace(r"\/", "/")
     # select all line with <option
     option_lines = re.findall(r"<option(.*?)<\/option>", response, re.S)
     if len(option_lines) == 0:

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from rich.console import Console
 
 if TYPE_CHECKING:
-    from ..media_interface import Media, Episode, Server
+    from .media_interface import Media, Episode, Server
 console = Console()
 
 def index_of(list_str,text):
@@ -117,17 +117,4 @@ class ProviderController:
 
 if __name__ == "__main__":
     test_list = ["p.pollllop.com", "b-g-eu-20.feetcdn.com:2223"]  
-    # die(has_str(test_list,"feetcdn.com"))
-    # order_list =  ['ok.ru', 'www.ok.ru', 'feetcdn.com', 'pollllop.com']   
-    # test_list = ['s.pollllop.com', 'b-g-eu-15.feetcdn.com:2223'] 
-    # die(index_of(order_list,test_list[0]))
-    # def key(s):
-    #     is_server_in_list = index_of(order_list,str(s)) 
-    #     if is_server_in_list == -1:
-    #         return 999
-    #     else:
-    #         return is_server_in_list
-    # die(key(test_list[1]))
-    # test_list = sorted(test_list, key=key)
-    # die(sorted_list=test_list)
     

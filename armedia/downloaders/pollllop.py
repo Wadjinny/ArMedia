@@ -5,10 +5,6 @@ from armedia.utils import die, debug
 import m3u8_To_MP4
 
 filter_function = lambda x: "pollllop.com" in x or "feetcdn.com" in x
-map_priority = {
-    "pollllop.com": 10,
-    "feetcdn.com": 10,
-}
 priority = 10
 
 def download(server_link, output_dir, file_name, desc=None, return_url=False):

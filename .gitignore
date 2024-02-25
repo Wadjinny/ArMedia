@@ -6,4 +6,4 @@ env
 **/*.mp4
 **/*.temp
 .venv
-m3u8_To_MP4
+.pytest_cache

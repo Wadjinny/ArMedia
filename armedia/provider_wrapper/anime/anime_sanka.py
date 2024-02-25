@@ -1,7 +1,7 @@
 from time import sleep
 from rich.console import Console
 from ..base_provider import Provider
-from armedia.media_interface import Media, Episode, Server
+from armedia.provider_wrapper.media_interface import Media, Episode, Server
 from armedia.utils import wait, die, debug
 from pdb import set_trace
 from armedia.scrapers.anime.anime_sanka_scraper import (

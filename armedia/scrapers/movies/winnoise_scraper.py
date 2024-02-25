@@ -120,7 +120,12 @@ def get_all_episodes_server_link(episodes_desc):
         response = session.get(url, headers=rabbit_headers, timeout=100)
         response = response.json()
         server_link = response["sources"][0]["file"]
-        server_ids_stage2.append(server_link)
+        captions = []
+        for e in response["tracks"]:
+            if e["kind"] == "captions":
+                captions.append({"file": e["file"], "label": e["label"]})
+        server_ids_stage2.append({"link": server_link, "captions": captions})
+        
     return server_ids_stage2
 
 

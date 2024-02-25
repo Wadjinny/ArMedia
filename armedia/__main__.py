@@ -2,6 +2,7 @@ import re
 import typer
 from time import sleep
 from pathlib import Path
+import logging
 from typing_extensions import Annotated
 from typing import Optional
 from rich.table import Table
@@ -20,8 +21,10 @@ from armedia.provider_wrapper import (
     Provider,
 )
 from armedia.cli_cycle import search_part, media_decision,choose_provider
-from armedia.media_interface import Media
+from armedia.provider_wrapper.media_interface import Media
 from .utils import zip_extend, die, filter_list
+
+logging.basicConfig(level=logging.ERROR)
 
 console = Console()
 
@@ -130,7 +133,9 @@ def main(
             )
             if server.download(output_dir=output_dir):
                 break
-            console.print(f"[bold red]Skipping[/]")
+            console.print(f"[bold red]Skipping server[/]")
+        else:
+            console.print(f"[bold red]No server available for EP{episode.number}[/]")
 
 
 def run():

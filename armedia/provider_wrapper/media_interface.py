@@ -1,7 +1,6 @@
-from .provider_wrapper.base_provider import Provider
-from .scrapers.anime.animewave_scraper import search_media
-from .utils import debug, die
-from .downloaders import (
+from .base_provider import Provider
+from ..utils import debug, die
+from ..downloaders import (
     drive,
     mediafire,
     meganz,
@@ -81,6 +80,8 @@ class Server:
         self.link = link
         self.downloader = self.is_downloadable(self.link)
         self.priority = self.downloader.priority
+        self.file_name = f"{self.episode.provider.media.name}_EP{self.episode.number}.mp4"
+        self.file_name = re.sub(r'[<>:"/\\|?*]', "", self.file_name)
 
     def __repr__(self) -> str:
         repr = re.findall(r"//(.*?)/", self.link)[0]
@@ -113,7 +114,5 @@ class Server:
         return self.downloader.download(self.link, None, None, return_url=True)
 
     def download(self, output_dir):
-        file_name = f"{self.episode.provider.media.name}_EP{self.episode.number}.mp4"
-        file_name = re.sub(r'[<>:"/\\|?*]', "", file_name)
         desc = f"EP{self.episode.number}:{self}"
-        return self.downloader.download(self.link, output_dir, file_name, desc=desc)
+        return self.downloader.download(self.link, output_dir, self.file_name, desc=desc)

@@ -1,7 +1,7 @@
 from time import sleep
 from rich.console import Console
 from ..base_provider import Provider
-from armedia.media_interface import Media, Episode, Server
+from armedia.provider_wrapper.media_interface import Media, Episode, Server
 from armedia.scrapers.anime.animeiat_scraper import (
     get_search_results_link,
     get_all_episodes_server_link,
