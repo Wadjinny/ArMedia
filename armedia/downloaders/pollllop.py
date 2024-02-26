@@ -3,6 +3,9 @@ from pathlib import Path
 import requests
 from armedia.utils import die, debug
 import m3u8_To_MP4
+import logging
+
+
 
 filter_function = lambda x: "pollllop.com" in x or "feetcdn.com" in x
 priority = 10

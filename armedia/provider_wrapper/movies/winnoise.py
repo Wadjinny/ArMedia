@@ -39,12 +39,12 @@ class WinnoiseServer(Server):
 
     def download(self, output_dir: str) -> None:
         session = requests.Session()
+        caption_path = output_dir / "captions"
+        caption_path.mkdir(parents=True, exist_ok=True)
         for caption in self.captions:
             url = caption["file"]
             extention = url.split(".")[-1]
             response = session.get(url, timeout=100)
-            caption_path = output_dir / "captions"
-            caption_path.mkdir(parents=True, exist_ok=True)
             with open(caption_path / f"{caption['label']}.{extention}", "wb") as f:
                 f.write(response.content)
                 

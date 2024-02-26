@@ -2,5 +2,5 @@
 - [x] use config file for server priority
 - [x] when file file is interupted while downloding, skipit
 - [x] diffent ep count panel: display ep count
+- [x] write test for each site, each server scrapper
 - [ ] Wrap meganz in in cli interface
-- [ ] write test for each site, each server scrapper
