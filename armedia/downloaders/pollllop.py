@@ -2,9 +2,13 @@ import re
 from pathlib import Path
 import requests
 from armedia.utils import die, debug
-import m3u8_To_MP4
 import logging
-
+try:
+    import m3u8_To_MP4
+except ImportError:
+    import subprocess
+    import sys
+    subprocess.run([sys.executable, "-m", "pip", "install", Path(__file__).parent.parent / "lib/m3u8_To_MP4-0.1.12-py3-none-any.whl"], check=True)
 
 
 filter_function = lambda x: "pollllop.com" in x or "feetcdn.com" in x
