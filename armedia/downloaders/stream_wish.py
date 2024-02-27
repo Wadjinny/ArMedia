@@ -3,19 +3,20 @@ from pathlib import Path
 import requests
 from armedia.utils.file_downloader import download_file
 from armedia.utils import die
-import m3u8_To_MP4
-import logging
-logging.getLogger("m3u8downloader").setLevel(logging.WARNING)
 
-
-
+try:
+    import m3u8_To_MP4
+except ImportError:
+    import subprocess
+    import sys
+    subprocess.run([sys.executable, "-m", "pip", "install", Path.home() / ".armedia/m3u8_To_MP4-0.1.12-py3-none-any.whl"], check=True)
+    import m3u8_To_MP4
 filter_function = lambda x: "anime4low.sb" in x
 priority = 0
 
 
 
 def download(server_link, output_dir, file_name, desc=None,return_url=False):
-    #sources: [{file:"https://ppgsamilsxto.sw-cdnstream.com/hls2/01/02395/czczrte7q5vc_h/master.m3u8?t=juBJm0v8FqtkiRY2wPvFfX1vNUWWD3X2Tqv9TvanrwU&s=1701301357&e=129600&f=11979029&srv=tszfjzanyeke&i=0.4&sp=500&p1=tszfjzanyeke&p2=tszfjzanyeke&asn=15557"}],
     response = requests.get(server_link)
     response = response.text
     sources = re.findall(r'sources: \[\{file:"(.*?)"\}\]', response)

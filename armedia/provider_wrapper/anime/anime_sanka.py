@@ -37,16 +37,16 @@ class AnimeSanka(Provider):
 
     def _request_episodes(self) -> list["Episode"]:
         episode_info = get_all_episodes_server_link(self.media.link)
+        # die(episode_info)
         episodes: list[Episode] = []
+        
         for number, server_links in episode_info:
+            episode = Episode(provider=self, number=number)
             servers = [
-                Server(link=server_link)
+                Server(link=server_link, episode=episode)
                 for server_link in server_links
                 if Server.is_downloadable(server_link)
             ]
-            episode = Episode(provider=self, number=number, servers=servers)
-            for server in servers:
-                server.episode = episode
+            episode._servers = servers
             episodes.append(episode)
-
         return episodes

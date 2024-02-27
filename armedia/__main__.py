@@ -52,7 +52,6 @@ def main(
     ]
     
     search_providers = choose_provider(providers_choice,search_providers)
-
     columns, medias = search_part(
         media=search_name, console=console, search_providers=search_providers
     )
