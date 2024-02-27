@@ -30,7 +30,7 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 
 @app.command()
 def main(
-    name: Annotated[str, typer.Option(prompt=True)],
+    search_name: Annotated[str, typer.Option("-s","--search",prompt=True,help="Search for a movie or series")],
     path=typer.Option(None, envvar="ARMEDIA_PATH"),
     r: Annotated[bool,typer.Option( "--range", "-r", help="Choose the episode range")] = False,
     servers_order_file: Annotated[
@@ -54,7 +54,7 @@ def main(
     search_providers = choose_provider(providers_choice,search_providers)
 
     columns, medias = search_part(
-        media=name, console=console, search_providers=search_providers
+        media=search_name, console=console, search_providers=search_providers
     )
     if columns is None:
         return
