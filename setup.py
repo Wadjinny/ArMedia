@@ -23,7 +23,7 @@ long_description = "Download Anime/ Movies/ Series with arabic sub from public w
 
 m3u8_to_mp4 = "lib/m3u8_To_MP4-0.1.12-py3-none-any.whl"
 m3u8_to_mp4 = Path(__file__).parent / m3u8_to_mp4
-subprocess.run(['pip','install', str(m3u8_to_mp4)],check=True)
+subprocess.run(['python','-m','pip','install', str(m3u8_to_mp4)],check=True)
 
 setup(
     name="armedia",
