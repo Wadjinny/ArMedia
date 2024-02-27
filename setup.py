@@ -21,7 +21,7 @@ if not config_file.exists():
 
 long_description = "Download Anime/ Movies/ Series with arabic sub from public websites"
 m3u8_to_mp4 = Path("lib/m3u8_To_MP4-0.1.12-py3-none-any.whl").absolute()
-subprocess.check_call(['pip', 'install', m3u8_to_mp4])
+subprocess.check_call(['pip', 'install', str(m3u8_to_mp4)])
 
 setup(
     name="armedia",
