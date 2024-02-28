@@ -32,7 +32,6 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
     session.headers.update(headers)
     response = session.request("GET", server_link, timeout=100)
     response = response.text
-    # $.get('/pass_md5/103682933-85-170-1706983115-9ba8aa2fd2fbacd411ce2b6460bf739f/18uk7y70cfhuw12grfhrko9v',
     md5 = re.findall(r"(/pass_md5/.*?)',", response)
     token = re.findall(r"\?token=.*?&expiry=", response)
     if not md5 or not token:
