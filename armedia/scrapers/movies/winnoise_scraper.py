@@ -26,6 +26,7 @@ session = requests.Session()
 
 
 def get_search_results_link(search_term: str) -> list[dict[str, str]]:
+    return []
     search_term = quote(search_term)
     url = "https://winnoise.com/ajax/search"
     body = f"keyword={search_term}"
@@ -90,7 +91,8 @@ rabbit_headers = {
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
     "x-requested-with": "XMLHttpRequest",
-    "Referer": "https://rabbitstream.net/embed-4",
+    "Referer": "https://rabbitstream.net/v2/embed-4",
+    "user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     "Referrer-Policy": "strict-origin-when-cross-origin",
 }
 
@@ -109,17 +111,20 @@ def get_all_episodes_server_link(episodes_desc):
     server_ids_stage2 = []
     for server_id in server_ids:
         url = f"https://winnoise.com/ajax/episode/sources/{server_id}"
-        response = session.get(url, headers=headers, timeout=100)
+        response = session.get(url, headers=headers)
         response = response.json()
         link = response["link"]
         if "rabbitstream" not in link:
             continue
         rabbit_id = re.findall(r"embed-\d+/(.+)\?", link)[0]
-        rabbit_embed = re.findall(r"embed-(\d+)/", link)[0]
-        url = f"https://rabbitstream.net/ajax/embed-{rabbit_embed}/getSources?id={rabbit_id}"
-        response = session.get(url, headers=rabbit_headers, timeout=100)
+        rabbit_embed = re.findall(r".net(/.+/embed-\d+)/", link)[0]
+        url = f"https://rabbitstream.net/ajax{rabbit_embed}/getSources?id={rabbit_id}&v=49138&h=e524adfb248218e77a2e84aebeb43fb9b425a2d0&b=1878522368"
+        # die(url)
+        response = session.get(url, headers=rabbit_headers)
         response = response.json()
-        server_link = response["sources"][0]["file"]
+        server_link = response["sources"]
+        server_link = "https://rabbitstream.net/" + server_link
+        die(server_link)
         captions = []
         for e in response["tracks"]:
             if e["kind"] == "captions":
@@ -135,5 +140,5 @@ if __name__ == "__main__":
     # die(result)
     # media_desc =  {'name': 'The 100 Season 1', 'id': '9', 'type': 'TV'}
     # die(get_episodes_list(media_desc))
-    episode_desc = {'id': '115', 'number': 'Eps 1: Pilot', 'type': 'TV'}
+    episode_desc = {'id': '19467', 'number': 'Eps 1: Everything Is Great!', 'type': 'TV'}    
     die(get_all_episodes_server_link(episode_desc))

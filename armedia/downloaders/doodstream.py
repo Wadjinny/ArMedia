@@ -55,7 +55,6 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
         "Referrer-Policy": "strict-origin-when-cross-origin",
     }
     response = session.request("GET", url, headers=headers, timeout=100)
-    # https://op168li.video-delivery.net/u5kj2cd5e3elsdgge4cteoyckchpcwe4klb7mwp55gikzpkaz7gq3ad45tbq/6npvqqwn0b~
 
     base_url = response.text
     full_url = f"{base_url}IrHklgWrek{token[0]}{datetime.now().timestamp()*1000:.0f}"
