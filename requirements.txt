@@ -5,3 +5,4 @@ httpx
 typer[all]
 jmespath
 cloudscraper
+m3u8_to_mp4

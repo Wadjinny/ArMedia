@@ -4,13 +4,13 @@ import requests
 from armedia.utils.file_downloader import download_file
 from armedia.utils import die
 
-try:
-    import m3u8_To_MP4
-except ImportError:
-    import subprocess
-    import sys
-    subprocess.run([sys.executable, "-m", "pip", "install", Path.home() / ".armedia/m3u8_To_MP4-0.1.12-py3-none-any.whl"], check=True)
-    import m3u8_To_MP4
+# try:
+#     import m3u8_To_MP4
+# except ImportError:
+#     import subprocess
+#     import sys
+#     subprocess.run([sys.executable, "-m", "pip", "install", Path.home() / ".armedia/m3u8_To_MP4-0.1.12-py3-none-any.whl"], check=True)
+#     import m3u8_To_MP4
 filter_function = lambda x: "anime4low.sb" in x
 priority = 0
 
