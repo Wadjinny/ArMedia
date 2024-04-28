@@ -36,7 +36,8 @@ headers = {
     "upgrade-insecure-requests": "1",
 }
 
-# headers.update(config.get("drive_headers", {}))
+headers.update(config.get("drive_headers", {}))
+
 
 def download(server_link, output_dir, file_name, desc=None, return_url=False):
     def get_id(link):
@@ -49,14 +50,21 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
     url = f"https://drive.usercontent.google.com/download?id={id}&export=download"
     session = requests.Session()
     session.headers.update(headers)
-    response = session.get(url)
+
+    if session.head(url).headers.get("Content-Type") == "application/octet-stream":
+        if return_url:
+            return url
+        return download_file(
+            url, output_dir, file_name, desc=desc, CONNECTIONS=1, session=session
+        )
+
+    response = session.get(url, timeout=100)
     response = response.text
     soup = BeautifulSoup(response, "html.parser")
     download_form = soup.select_one("form", id="download-form")
     if download_form:
         download_base = download_form["action"]
         download_params = download_form.select("input")
-        # die(download_params)
         download_params = {
             x["name"]: x["value"] for x in download_params if x.get("name")
         }
@@ -71,7 +79,7 @@ def download(server_link, output_dir, file_name, desc=None, return_url=False):
 
 
 if __name__ == "__main__":
-    server_link = "https://drive.usercontent.google.com/download?id=1B8aF0FLYOct3aOVhI_jdi8uoLz4CyFPc&export=download&authuser=0"
+    server_link = "https://drive.google.com/uc?id=1ByR9C_Q1lFRvQnoFcRY2htW4kURDbq57&export=download"
     output_dir = Path(".")
     file_name = "test.mp4"
     die(download(server_link, output_dir, file_name))

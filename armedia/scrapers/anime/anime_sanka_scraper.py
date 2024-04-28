@@ -8,7 +8,7 @@ from armedia.utils import debug, die
 
 def get_search_results_link(search_term) -> list[dict[str, str]]:
     search_term = quote(search_term)
-    url = f"https://www.anime-sanka.com/search?q={search_term}&max-results=128"
+    url = f"https://ww.anime-sanka.com/search?q={search_term}&max-results=128"
     # debug(url_anime_sanka=url)
     response = requests.request("GET", url)
     html_doc = response.text
@@ -38,7 +38,7 @@ def get_search_results_link(search_term) -> list[dict[str, str]]:
         name = re.sub(r"[^a-zA-Z0-9]+$", "", name)
         name = name.strip()
         # die(name=name)
-        
+
         link = anime.select_one("a[aria-label='main image']")["href"]
         anime_list_formated.append({"name": name, "link": link})
     return anime_list_formated
@@ -84,7 +84,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
         links = [link["href"] for link in links]
     except KeyError:
         return []
-        
+
     if len(links) == 0:
         print("No links found")
         return []
@@ -106,7 +106,9 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
     response = response.text
     search_link = link.replace("watch.animesanka.com", "prwd.animesanka.club")
 
-    regex = fr"""["']id["']: *["'](.*)["'],[\s\n]*["']link["']: *["']{search_link}["']"""
+    regex = (
+        rf"""["']id["']: *["'](.*)["'],[\s\n]*["']link["']: *["']{search_link}["']"""
+    )
     id = re.search(regex, response)
     if id is not None:
         id = id.group(1)
@@ -150,8 +152,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
         second_links = re.findall(second_regex, response, re.S)
         links = first_links + second_links
         return [("1", links)]
-        
-        
+
     episodes_list = []
     # identify if its a movie or a serie
     if "@" in option_lines[0]:
@@ -189,5 +190,7 @@ def get_all_episodes_server_link(anime_link) -> list[tuple[str, list[str]]]:
 
 
 if __name__ == "__main__":
-    anime_link = "https://www.anime-sanka.com/2019/03/brave-story-1080p.html"
+    anime_link = "https://ww.anime-sanka.com/2020/02/mushishi-season-1-1080p.html"
     debug(get_all_episodes_server_link(anime_link))
+    # search_term = "fire force"
+    # debug(get_search_results_link(search_term))
