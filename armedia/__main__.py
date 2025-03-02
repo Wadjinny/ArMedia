@@ -39,7 +39,7 @@ def main(
             "--priority", "-p", help="Choose the priority of servers", exists=True
         ),
     ] = None,
-    providers_choice :Annotated[Optional[str],typer.Option('--provider-choice','-c',help="Choose which source to search: w[Witanime]i[Animeiat]z[Zimabadk]t[TopCinema]k[Akwam] anime or media or all")] = "anime"
+    providers_choice :Annotated[Optional[str],typer.Option('--provider-choice','-c',help="Choose which source to search: w[Witanime]i[Animeiat]z[Zimabadk]t[TopCinema]k[Akwam] anime or media or all")] = "all"
 ):
     search_providers = [
         # AnimeSanka,
@@ -48,7 +48,7 @@ def main(
         ZimaBdk,
         TopCinema,
         Akwam,
-        Winnoise,
+        # Winnoise,
     ]
     
     search_providers = choose_provider(providers_choice,search_providers)
@@ -127,8 +127,13 @@ def main(
                 f"[green]{server.episode.provider.__class__.__name__}[/] / [green]EP{episode.number}->{provider_controller.episodes_len}[/]: {available_servers}",
                 # markup=False,
             )
-            if server.download(output_dir=output_dir):
-                break
+            try:
+                if server.download(output_dir=output_dir):
+                    break
+            except Exception as e:
+                console.print(f"[bold red]Error downloading {server.link}[/]")
+                console.print(f"[bold red]Error: {e}[/]")
+                continue
             console.print(f"[bold red]Skipping server[/]")
         else:
             console.print(f"[bold red]No server available for EP{episode.number}[/]")
