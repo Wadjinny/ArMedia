@@ -39,10 +39,10 @@ def main(
             "--priority", "-p", help="Choose the priority of servers", exists=True
         ),
     ] = None,
-    providers_choice :Annotated[Optional[str],typer.Option('--provider-choice','-c',help="Choose which source to search: a[AnimeSanka]w[Witanime]i[Animeiat]z[Zimabadk]t[TopCinema]k[Akwam]")] = "anime"
+    providers_choice :Annotated[Optional[str],typer.Option('--provider-choice','-c',help="Choose which source to search: w[Witanime]i[Animeiat]z[Zimabadk]t[TopCinema]k[Akwam] anime or media or all")] = "anime"
 ):
     search_providers = [
-        AnimeSanka,
+        # AnimeSanka,
         WitAnime,
         AnimeIat,
         ZimaBdk,

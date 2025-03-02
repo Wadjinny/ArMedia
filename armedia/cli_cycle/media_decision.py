@@ -107,10 +107,10 @@ def choose_provider(filter_str,providers_list):
 
 if __name__ == "__main__":
     providers_list = [
-        AnimeSanka,
-        # WitAnime,
+        # AnimeSanka,
+        WitAnime,
         AnimeIat,
-        # ZimaBdk,
+        ZimaBdk,
         TopCinema,    
     ]
         
