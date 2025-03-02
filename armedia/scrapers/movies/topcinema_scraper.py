@@ -8,10 +8,12 @@ from armedia.utils import debug, die
 
 def get_search_results_link(search_term: str) -> list[dict[str, str]]:
     search_term = quote(search_term)
-    url = "https://web.topcinema.cam/wp-content/themes/movies2023/Ajaxat/Searching.php"
+    url = "https://web2.topcinema.cam/wp-content/themes/movies2023/Ajaxat/Searching.php"
     headers = {
         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "Referer": "https://web.topcinema.cam/",
+        "Referer": "https://web2.topcinema.cam/",
+        "X-Requested-With": "XMLHttpRequest",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     }
     body = f"search={search_term}+&type=all"
     response = requests.request("POST", url, headers=headers, data=body, timeout=100)
@@ -93,10 +95,11 @@ def get_all_episodes_server_link(episode_link):
 
 
 if __name__ == "__main__":
-    # search_term = "the 100"
-    # result = get_search_results_link(search_term)
+    search_term = "the 100"
+    result = get_search_results_link(search_term)
+    print(result)
     # die(result)
-    # link = "https://web.topcinema.cam/%d9%85%d8%b3%d9%84%d8%b3%d9%84-the-vampire-diaries-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%b3%d8%a7%d8%af%d8%b3-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1-%d9%85%d8%aa%d8%b1%d8%ac%d9%85%d8%a9/"
+    # link = "https://web2.topcinema.cam/%d9%85%d8%b3%d9%84%d8%b3%d9%84-the-vampire-diaries-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%b3%d8%a7%d8%af%d8%b3-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1-%d9%85%d8%aa%d8%b1%d8%ac%d9%85%d8%a9/"
     # die(get_episodes_list(link))
-    episode_link = "https://web.topcinema.cam/%d9%85%d8%b3%d9%84%d8%b3%d9%84-the-vampire-diaries-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%b3%d8%a7%d8%af%d8%b3-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1-%d9%85%d8%aa%d8%b1%d8%ac%d9%85%d8%a9/watch/"
-    die(get_all_episodes_server_link(episode_link))
+    # episode_link = "https://web2.topcinema.cam/%d9%85%d8%b3%d9%84%d8%b3%d9%84-the-vampire-diaries-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%b3%d8%a7%d8%af%d8%b3-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1-%d9%85%d8%aa%d8%b1%d8%ac%d9%85%d8%a9/watch/"
+    # die(get_all_episodes_server_link(episode_link))

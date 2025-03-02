@@ -7,8 +7,11 @@ from armedia.scrapers.movies.akwam_scraper import (
 def test_get_search_results_link():
     search_term = "black mirror"
     result = get_search_results_link(search_term)
-    print(result)
-    assert len(result) >= 5
+    # print(result)
+    # get how many occurrences of the search term in the result
+    occurrences = sum(1 for item in result if search_term.lower() in item["name"].lower())
+    assert occurrences >= 5, f'{occurrences=} {search_term=}'
+    assert len(result) >= 5, f'{len(result)=} {search_term=}'
     
 def test_get_episodes_list():
     anime_link = "https://ak.sv/series/533/black-mirror-الموسم-الاول"
@@ -24,6 +27,6 @@ def test_get_all_episodes_server_link():
     
 if __name__ == "__main__":
     pass
-    # test_get_search_results_link()
+    test_get_search_results_link()
     # test_get_episodes_list()
-    test_get_all_episodes_server_link()
+    # test_get_all_episodes_server_link()
