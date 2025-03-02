@@ -100,7 +100,7 @@ def get_all_episodes_server_link(episode_link):
     response = response.text
     # <a href="http://noon.khsm.io/watch/89859"
     episode_id = re.findall(r"ak.sv/[a-z]+/(\d+/.*)", episode_link)[0]
-    server_id = re.findall(r"http://noon.khsm.io/watch/(\d+)", response)
+    server_id = re.findall(r"http://go.ak.sv/watch/(\d+)", response)
     if server_id:
         server_id = server_id[0]
     else:
