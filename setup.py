@@ -14,7 +14,7 @@ app_path.mkdir(exist_ok=True)
 
 app_priority = app_path / "priority.txt"
 if not app_priority.exists():
-    app_priority.write_text(priority)
+    app_priority.write_text("".join(priority))
 
 config_file = app_path / "config.json"
 if not config_file.exists():
