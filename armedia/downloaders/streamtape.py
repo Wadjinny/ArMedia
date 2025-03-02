@@ -29,7 +29,10 @@ headers = {
 def download(server_link, output_dir, file_name, desc=None, return_url=False):
     session = requests.Session()
     session.headers.update(headers)
-    response = session.request("GET", server_link, timeout=100)
+    try:
+        response = session.request("GET", server_link, timeout=100)
+    except requests.exceptions.RequestException as e:
+        return False
     response = response.text
 
     tokens = re.findall(r"&(token=.+)'", response)
