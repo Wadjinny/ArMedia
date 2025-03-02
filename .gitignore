@@ -7,3 +7,4 @@ env
 **/*.temp
 .venv
 .pytest_cache
+test-area

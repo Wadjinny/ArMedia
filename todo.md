@@ -4,3 +4,5 @@
 - [x] diffent ep count panel: display ep count
 - [x] write test for each site, each server scrapper
 - [ ] Wrap meganz in in cli interface
+- [x] add test case for ensuring the quality of search results
+- [ ] add more urls for testing
