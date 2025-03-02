@@ -70,10 +70,10 @@ def get_all_episodes_server_link(episode_link):
     soup = BeautifulSoup(response, "html.parser")
     servers_ids = soup.select(".watch--servers--list > ul > li")
     servers_ids = [(sid["data-id"], sid["data-server"]) for sid in servers_ids]
-    url = "https://web.topcinema.cam/wp-content/themes/movies2023/Ajaxat/Single/Server.php"
+    url = "https://web2.topcinema.cam/wp-content/themes/movies2023/Ajaxat/Single/Server.php"
     headers = {
         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "referer": "https://web.topcinema.cam/",
+        "referer": "https://web2.topcinema.cam/",
         "x-requested-with": "XMLHttpRequest",
     }
     servers_link = []
@@ -93,10 +93,10 @@ def get_all_episodes_server_link(episode_link):
 
 
 if __name__ == "__main__":
-    search_term = "the 100"
-    result = get_search_results_link(search_term)
-    die(result)
+    # search_term = "the 100"
+    # result = get_search_results_link(search_term)
+    # die(result)
     # link = "https://web.topcinema.cam/%d9%85%d8%b3%d9%84%d8%b3%d9%84-the-vampire-diaries-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%b3%d8%a7%d8%af%d8%b3-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1-%d9%85%d8%aa%d8%b1%d8%ac%d9%85%d8%a9/"
     # die(get_episodes_list(link))
-    # episode_link = "https://web.topcinema.cam/%d9%85%d8%b3%d9%84%d8%b3%d9%84-the-vampire-diaries-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%b3%d8%a7%d8%af%d8%b3-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1-%d9%85%d8%aa%d8%b1%d8%ac%d9%85%d8%a9/watch/"
-    # die(get_all_episodes_server_link(episode_link))
+    episode_link = "https://web.topcinema.cam/%d9%85%d8%b3%d9%84%d8%b3%d9%84-the-vampire-diaries-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%b3%d8%a7%d8%af%d8%b3-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1-%d9%85%d8%aa%d8%b1%d8%ac%d9%85%d8%a9/watch/"
+    die(get_all_episodes_server_link(episode_link))
