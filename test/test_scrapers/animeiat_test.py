@@ -5,10 +5,12 @@ from armedia.scrapers.anime.animeiat_scraper import (
 )
 
 def test_get_search_results_link():
-    search_term = "fire force"
+    search_term = "naruto"
     result = get_search_results_link(search_term)
     print(result)
-    assert len(result) >= 2
+    occurrences = sum(1 for item in result if search_term.lower() in item["name"].lower())
+    assert occurrences >= 14, f'{occurrences=} {search_term=}'
+    assert len(result) >= 14, f'{len(result)=} {search_term=}'
     
 def test_get_episodes_list():
     anime_link = "https://www.animeiat.xyz/anime/enen-no-shouboutai"
@@ -24,6 +26,6 @@ def test_get_all_episodes_server_link():
     assert len(result) >= 1
 if __name__ == "__main__":
     pass
-    # test_get_search_results_link()
+    test_get_search_results_link()
     # test_get_episodes_list()
-    test_get_all_episodes_server_link()
+    # test_get_all_episodes_server_link()

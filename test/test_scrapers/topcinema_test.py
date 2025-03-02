@@ -8,7 +8,9 @@ def test_get_search_results_link():
     search_term = "black mirror"
     result = get_search_results_link(search_term)
     print(result)
-    assert len(result) >= 6
+    occurrences = sum(1 for item in result if search_term.lower() in item["name"].lower())
+    assert occurrences >= 6, f'{occurrences=} {search_term=}'
+    assert len(result) >= 6, f'{len(result)=} {search_term=}'
     
 def test_get_episodes_list():
     anime_link = "https://web.topcinema.cam/series/%d9%85%d8%b3%d9%84%d8%b3%d9%84-black-mirror-%d8%a7%d9%84%d9%85%d9%88%d8%b3%d9%85-%d8%a7%d9%84%d8%a7%d9%88%d9%84-%d9%85%d8%aa%d8%b1%d8%ac%d9%85/"
@@ -24,6 +26,6 @@ def test_get_all_episodes_server_link():
     
 if __name__ == "__main__":
     pass
-    # test_get_search_results_link()
+    test_get_search_results_link()
     # test_get_episodes_list()
     # test_get_all_episodes_server_link()
